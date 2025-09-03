@@ -1,0 +1,76 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "app/generated/prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum GENDER {
+  Male
+  Female
+}
+
+enum BloodGroup {
+  A_POS  @map("A+")
+  A_NEG  @map("A-")
+  B_POS  @map("B+")
+  B_NEG  @map("B-")
+  O_POS  @map("O+")
+  O_NEG  @map("O-")
+  AB_POS @map("AB+")
+  AB_NEG @map("AB-")
+}
+
+model User {
+  id                 Int                  @id @default(autoincrement())
+  profile            Profile?
+  credential         Credential?
+  address            Address?
+  donationExperience DonationExperience[]
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+}
+
+model Profile {
+  id          Int        @id @default(autoincrement())
+  fullName    String
+  age         Int
+  email       String?
+  phoneNumber String     @unique
+  weight      Int
+  gender      GENDER
+  bloodGroup  BloodGroup
+
+  user   User @relation(fields: [userId], references: [id])
+  userId Int  @unique
+}
+
+model Credential {
+  id       Int    @id @default(autoincrement())
+  password String
+
+  user   User @relation(fields: [userId], references: [id])
+  userId Int  @unique
+}
+
+model Address {
+  id       Int     @id @default(autoincrement())
+  area     String?
+  division String
+  district String
+  upazila  String
+  user     User    @relation(fields: [userId], references: [id])
+  userId   Int     @unique
+}
+
+model DonationExperience {
+  id                   Int    @id @default(autoincrement())
+  lastDonationDate     String
+  lastDonationLocation String
+
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
+}
