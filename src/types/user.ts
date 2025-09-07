@@ -5,6 +5,7 @@ export type UserPayload = Prisma.UserGetPayload<{
     address: true;
     donationExperience: true;
     profile: true;
+    
   };
 }>;
 

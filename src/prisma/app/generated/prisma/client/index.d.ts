@@ -2465,8 +2465,12 @@ export namespace Prisma {
     email: string | null
     phoneNumber: string | null
     weight: number | null
+    img: string | null
+    bod: string | null
+    occupation: string | null
     gender: $Enums.GENDER | null
     bloodGroup: $Enums.BloodGroup | null
+    activeDoner: boolean | null
     userId: number | null
   }
 
@@ -2477,8 +2481,12 @@ export namespace Prisma {
     email: string | null
     phoneNumber: string | null
     weight: number | null
+    img: string | null
+    bod: string | null
+    occupation: string | null
     gender: $Enums.GENDER | null
     bloodGroup: $Enums.BloodGroup | null
+    activeDoner: boolean | null
     userId: number | null
   }
 
@@ -2489,8 +2497,12 @@ export namespace Prisma {
     email: number
     phoneNumber: number
     weight: number
+    img: number
+    bod: number
+    occupation: number
     gender: number
     bloodGroup: number
+    activeDoner: number
     userId: number
     _all: number
   }
@@ -2517,8 +2529,12 @@ export namespace Prisma {
     email?: true
     phoneNumber?: true
     weight?: true
+    img?: true
+    bod?: true
+    occupation?: true
     gender?: true
     bloodGroup?: true
+    activeDoner?: true
     userId?: true
   }
 
@@ -2529,8 +2545,12 @@ export namespace Prisma {
     email?: true
     phoneNumber?: true
     weight?: true
+    img?: true
+    bod?: true
+    occupation?: true
     gender?: true
     bloodGroup?: true
+    activeDoner?: true
     userId?: true
   }
 
@@ -2541,8 +2561,12 @@ export namespace Prisma {
     email?: true
     phoneNumber?: true
     weight?: true
+    img?: true
+    bod?: true
+    occupation?: true
     gender?: true
     bloodGroup?: true
+    activeDoner?: true
     userId?: true
     _all?: true
   }
@@ -2640,8 +2664,12 @@ export namespace Prisma {
     email: string | null
     phoneNumber: string
     weight: number
+    img: string | null
+    bod: string | null
+    occupation: string | null
     gender: $Enums.GENDER
     bloodGroup: $Enums.BloodGroup
+    activeDoner: boolean
     userId: number
     _count: ProfileCountAggregateOutputType | null
     _avg: ProfileAvgAggregateOutputType | null
@@ -2671,8 +2699,12 @@ export namespace Prisma {
     email?: boolean
     phoneNumber?: boolean
     weight?: boolean
+    img?: boolean
+    bod?: boolean
+    occupation?: boolean
     gender?: boolean
     bloodGroup?: boolean
+    activeDoner?: boolean
     userId?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["profile"]>
@@ -2684,8 +2716,12 @@ export namespace Prisma {
     email?: boolean
     phoneNumber?: boolean
     weight?: boolean
+    img?: boolean
+    bod?: boolean
+    occupation?: boolean
     gender?: boolean
     bloodGroup?: boolean
+    activeDoner?: boolean
     userId?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["profile"]>
@@ -2697,8 +2733,12 @@ export namespace Prisma {
     email?: boolean
     phoneNumber?: boolean
     weight?: boolean
+    img?: boolean
+    bod?: boolean
+    occupation?: boolean
     gender?: boolean
     bloodGroup?: boolean
+    activeDoner?: boolean
     userId?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["profile"]>
@@ -2710,12 +2750,16 @@ export namespace Prisma {
     email?: boolean
     phoneNumber?: boolean
     weight?: boolean
+    img?: boolean
+    bod?: boolean
+    occupation?: boolean
     gender?: boolean
     bloodGroup?: boolean
+    activeDoner?: boolean
     userId?: boolean
   }
 
-  export type ProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "fullName" | "age" | "email" | "phoneNumber" | "weight" | "gender" | "bloodGroup" | "userId", ExtArgs["result"]["profile"]>
+  export type ProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "fullName" | "age" | "email" | "phoneNumber" | "weight" | "img" | "bod" | "occupation" | "gender" | "bloodGroup" | "activeDoner" | "userId", ExtArgs["result"]["profile"]>
   export type ProfileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -2738,8 +2782,12 @@ export namespace Prisma {
       email: string | null
       phoneNumber: string
       weight: number
+      img: string | null
+      bod: string | null
+      occupation: string | null
       gender: $Enums.GENDER
       bloodGroup: $Enums.BloodGroup
+      activeDoner: boolean
       userId: number
     }, ExtArgs["result"]["profile"]>
     composites: {}
@@ -3171,8 +3219,12 @@ export namespace Prisma {
     readonly email: FieldRef<"Profile", 'String'>
     readonly phoneNumber: FieldRef<"Profile", 'String'>
     readonly weight: FieldRef<"Profile", 'Int'>
+    readonly img: FieldRef<"Profile", 'String'>
+    readonly bod: FieldRef<"Profile", 'String'>
+    readonly occupation: FieldRef<"Profile", 'String'>
     readonly gender: FieldRef<"Profile", 'GENDER'>
     readonly bloodGroup: FieldRef<"Profile", 'BloodGroup'>
+    readonly activeDoner: FieldRef<"Profile", 'Boolean'>
     readonly userId: FieldRef<"Profile", 'Int'>
   }
     
@@ -3602,29 +3654,46 @@ export namespace Prisma {
 
   export type CredentialAvgAggregateOutputType = {
     id: number | null
+    otp: number | null
     userId: number | null
   }
 
   export type CredentialSumAggregateOutputType = {
     id: number | null
+    otp: number | null
     userId: number | null
   }
 
   export type CredentialMinAggregateOutputType = {
     id: number | null
     password: string | null
+    randomPasswod: boolean | null
+    isVerify: boolean | null
+    otp: number | null
+    otpTime: Date | null
+    otpExp: Date | null
     userId: number | null
   }
 
   export type CredentialMaxAggregateOutputType = {
     id: number | null
     password: string | null
+    randomPasswod: boolean | null
+    isVerify: boolean | null
+    otp: number | null
+    otpTime: Date | null
+    otpExp: Date | null
     userId: number | null
   }
 
   export type CredentialCountAggregateOutputType = {
     id: number
     password: number
+    randomPasswod: number
+    isVerify: number
+    otp: number
+    otpTime: number
+    otpExp: number
     userId: number
     _all: number
   }
@@ -3632,29 +3701,46 @@ export namespace Prisma {
 
   export type CredentialAvgAggregateInputType = {
     id?: true
+    otp?: true
     userId?: true
   }
 
   export type CredentialSumAggregateInputType = {
     id?: true
+    otp?: true
     userId?: true
   }
 
   export type CredentialMinAggregateInputType = {
     id?: true
     password?: true
+    randomPasswod?: true
+    isVerify?: true
+    otp?: true
+    otpTime?: true
+    otpExp?: true
     userId?: true
   }
 
   export type CredentialMaxAggregateInputType = {
     id?: true
     password?: true
+    randomPasswod?: true
+    isVerify?: true
+    otp?: true
+    otpTime?: true
+    otpExp?: true
     userId?: true
   }
 
   export type CredentialCountAggregateInputType = {
     id?: true
     password?: true
+    randomPasswod?: true
+    isVerify?: true
+    otp?: true
+    otpTime?: true
+    otpExp?: true
     userId?: true
     _all?: true
   }
@@ -3748,6 +3834,11 @@ export namespace Prisma {
   export type CredentialGroupByOutputType = {
     id: number
     password: string
+    randomPasswod: boolean | null
+    isVerify: boolean
+    otp: number | null
+    otpTime: Date | null
+    otpExp: Date | null
     userId: number
     _count: CredentialCountAggregateOutputType | null
     _avg: CredentialAvgAggregateOutputType | null
@@ -3773,6 +3864,11 @@ export namespace Prisma {
   export type CredentialSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     password?: boolean
+    randomPasswod?: boolean
+    isVerify?: boolean
+    otp?: boolean
+    otpTime?: boolean
+    otpExp?: boolean
     userId?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["credential"]>
@@ -3780,6 +3876,11 @@ export namespace Prisma {
   export type CredentialSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     password?: boolean
+    randomPasswod?: boolean
+    isVerify?: boolean
+    otp?: boolean
+    otpTime?: boolean
+    otpExp?: boolean
     userId?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["credential"]>
@@ -3787,6 +3888,11 @@ export namespace Prisma {
   export type CredentialSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     password?: boolean
+    randomPasswod?: boolean
+    isVerify?: boolean
+    otp?: boolean
+    otpTime?: boolean
+    otpExp?: boolean
     userId?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["credential"]>
@@ -3794,10 +3900,15 @@ export namespace Prisma {
   export type CredentialSelectScalar = {
     id?: boolean
     password?: boolean
+    randomPasswod?: boolean
+    isVerify?: boolean
+    otp?: boolean
+    otpTime?: boolean
+    otpExp?: boolean
     userId?: boolean
   }
 
-  export type CredentialOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "password" | "userId", ExtArgs["result"]["credential"]>
+  export type CredentialOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "password" | "randomPasswod" | "isVerify" | "otp" | "otpTime" | "otpExp" | "userId", ExtArgs["result"]["credential"]>
   export type CredentialInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -3816,6 +3927,11 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: number
       password: string
+      randomPasswod: boolean | null
+      isVerify: boolean
+      otp: number | null
+      otpTime: Date | null
+      otpExp: Date | null
       userId: number
     }, ExtArgs["result"]["credential"]>
     composites: {}
@@ -4243,6 +4359,11 @@ export namespace Prisma {
   interface CredentialFieldRefs {
     readonly id: FieldRef<"Credential", 'Int'>
     readonly password: FieldRef<"Credential", 'String'>
+    readonly randomPasswod: FieldRef<"Credential", 'Boolean'>
+    readonly isVerify: FieldRef<"Credential", 'Boolean'>
+    readonly otp: FieldRef<"Credential", 'Int'>
+    readonly otpTime: FieldRef<"Credential", 'DateTime'>
+    readonly otpExp: FieldRef<"Credential", 'DateTime'>
     readonly userId: FieldRef<"Credential", 'Int'>
   }
     
@@ -6880,8 +7001,12 @@ export namespace Prisma {
     email: 'email',
     phoneNumber: 'phoneNumber',
     weight: 'weight',
+    img: 'img',
+    bod: 'bod',
+    occupation: 'occupation',
     gender: 'gender',
     bloodGroup: 'bloodGroup',
+    activeDoner: 'activeDoner',
     userId: 'userId'
   };
 
@@ -6891,6 +7016,11 @@ export namespace Prisma {
   export const CredentialScalarFieldEnum: {
     id: 'id',
     password: 'password',
+    randomPasswod: 'randomPasswod',
+    isVerify: 'isVerify',
+    otp: 'otp',
+    otpTime: 'otpTime',
+    otpExp: 'otpExp',
     userId: 'userId'
   };
 
@@ -7019,6 +7149,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -7101,8 +7238,12 @@ export namespace Prisma {
     email?: StringNullableFilter<"Profile"> | string | null
     phoneNumber?: StringFilter<"Profile"> | string
     weight?: IntFilter<"Profile"> | number
+    img?: StringNullableFilter<"Profile"> | string | null
+    bod?: StringNullableFilter<"Profile"> | string | null
+    occupation?: StringNullableFilter<"Profile"> | string | null
     gender?: EnumGENDERFilter<"Profile"> | $Enums.GENDER
     bloodGroup?: EnumBloodGroupFilter<"Profile"> | $Enums.BloodGroup
+    activeDoner?: BoolFilter<"Profile"> | boolean
     userId?: IntFilter<"Profile"> | number
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
@@ -7114,8 +7255,12 @@ export namespace Prisma {
     email?: SortOrderInput | SortOrder
     phoneNumber?: SortOrder
     weight?: SortOrder
+    img?: SortOrderInput | SortOrder
+    bod?: SortOrderInput | SortOrder
+    occupation?: SortOrderInput | SortOrder
     gender?: SortOrder
     bloodGroup?: SortOrder
+    activeDoner?: SortOrder
     userId?: SortOrder
     user?: UserOrderByWithRelationInput
   }
@@ -7131,8 +7276,12 @@ export namespace Prisma {
     age?: IntFilter<"Profile"> | number
     email?: StringNullableFilter<"Profile"> | string | null
     weight?: IntFilter<"Profile"> | number
+    img?: StringNullableFilter<"Profile"> | string | null
+    bod?: StringNullableFilter<"Profile"> | string | null
+    occupation?: StringNullableFilter<"Profile"> | string | null
     gender?: EnumGENDERFilter<"Profile"> | $Enums.GENDER
     bloodGroup?: EnumBloodGroupFilter<"Profile"> | $Enums.BloodGroup
+    activeDoner?: BoolFilter<"Profile"> | boolean
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id" | "phoneNumber" | "userId">
 
@@ -7143,8 +7292,12 @@ export namespace Prisma {
     email?: SortOrderInput | SortOrder
     phoneNumber?: SortOrder
     weight?: SortOrder
+    img?: SortOrderInput | SortOrder
+    bod?: SortOrderInput | SortOrder
+    occupation?: SortOrderInput | SortOrder
     gender?: SortOrder
     bloodGroup?: SortOrder
+    activeDoner?: SortOrder
     userId?: SortOrder
     _count?: ProfileCountOrderByAggregateInput
     _avg?: ProfileAvgOrderByAggregateInput
@@ -7163,8 +7316,12 @@ export namespace Prisma {
     email?: StringNullableWithAggregatesFilter<"Profile"> | string | null
     phoneNumber?: StringWithAggregatesFilter<"Profile"> | string
     weight?: IntWithAggregatesFilter<"Profile"> | number
+    img?: StringNullableWithAggregatesFilter<"Profile"> | string | null
+    bod?: StringNullableWithAggregatesFilter<"Profile"> | string | null
+    occupation?: StringNullableWithAggregatesFilter<"Profile"> | string | null
     gender?: EnumGENDERWithAggregatesFilter<"Profile"> | $Enums.GENDER
     bloodGroup?: EnumBloodGroupWithAggregatesFilter<"Profile"> | $Enums.BloodGroup
+    activeDoner?: BoolWithAggregatesFilter<"Profile"> | boolean
     userId?: IntWithAggregatesFilter<"Profile"> | number
   }
 
@@ -7174,6 +7331,11 @@ export namespace Prisma {
     NOT?: CredentialWhereInput | CredentialWhereInput[]
     id?: IntFilter<"Credential"> | number
     password?: StringFilter<"Credential"> | string
+    randomPasswod?: BoolNullableFilter<"Credential"> | boolean | null
+    isVerify?: BoolFilter<"Credential"> | boolean
+    otp?: IntNullableFilter<"Credential"> | number | null
+    otpTime?: DateTimeNullableFilter<"Credential"> | Date | string | null
+    otpExp?: DateTimeNullableFilter<"Credential"> | Date | string | null
     userId?: IntFilter<"Credential"> | number
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
@@ -7181,6 +7343,11 @@ export namespace Prisma {
   export type CredentialOrderByWithRelationInput = {
     id?: SortOrder
     password?: SortOrder
+    randomPasswod?: SortOrderInput | SortOrder
+    isVerify?: SortOrder
+    otp?: SortOrderInput | SortOrder
+    otpTime?: SortOrderInput | SortOrder
+    otpExp?: SortOrderInput | SortOrder
     userId?: SortOrder
     user?: UserOrderByWithRelationInput
   }
@@ -7192,12 +7359,22 @@ export namespace Prisma {
     OR?: CredentialWhereInput[]
     NOT?: CredentialWhereInput | CredentialWhereInput[]
     password?: StringFilter<"Credential"> | string
+    randomPasswod?: BoolNullableFilter<"Credential"> | boolean | null
+    isVerify?: BoolFilter<"Credential"> | boolean
+    otp?: IntNullableFilter<"Credential"> | number | null
+    otpTime?: DateTimeNullableFilter<"Credential"> | Date | string | null
+    otpExp?: DateTimeNullableFilter<"Credential"> | Date | string | null
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id" | "userId">
 
   export type CredentialOrderByWithAggregationInput = {
     id?: SortOrder
     password?: SortOrder
+    randomPasswod?: SortOrderInput | SortOrder
+    isVerify?: SortOrder
+    otp?: SortOrderInput | SortOrder
+    otpTime?: SortOrderInput | SortOrder
+    otpExp?: SortOrderInput | SortOrder
     userId?: SortOrder
     _count?: CredentialCountOrderByAggregateInput
     _avg?: CredentialAvgOrderByAggregateInput
@@ -7212,6 +7389,11 @@ export namespace Prisma {
     NOT?: CredentialScalarWhereWithAggregatesInput | CredentialScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"Credential"> | number
     password?: StringWithAggregatesFilter<"Credential"> | string
+    randomPasswod?: BoolNullableWithAggregatesFilter<"Credential"> | boolean | null
+    isVerify?: BoolWithAggregatesFilter<"Credential"> | boolean
+    otp?: IntNullableWithAggregatesFilter<"Credential"> | number | null
+    otpTime?: DateTimeNullableWithAggregatesFilter<"Credential"> | Date | string | null
+    otpExp?: DateTimeNullableWithAggregatesFilter<"Credential"> | Date | string | null
     userId?: IntWithAggregatesFilter<"Credential"> | number
   }
 
@@ -7390,8 +7572,12 @@ export namespace Prisma {
     email?: string | null
     phoneNumber: string
     weight: number
+    img?: string | null
+    bod?: string | null
+    occupation?: string | null
     gender: $Enums.GENDER
     bloodGroup: $Enums.BloodGroup
+    activeDoner?: boolean
     user: UserCreateNestedOneWithoutProfileInput
   }
 
@@ -7402,8 +7588,12 @@ export namespace Prisma {
     email?: string | null
     phoneNumber: string
     weight: number
+    img?: string | null
+    bod?: string | null
+    occupation?: string | null
     gender: $Enums.GENDER
     bloodGroup: $Enums.BloodGroup
+    activeDoner?: boolean
     userId: number
   }
 
@@ -7413,8 +7603,12 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: StringFieldUpdateOperationsInput | string
     weight?: IntFieldUpdateOperationsInput | number
+    img?: NullableStringFieldUpdateOperationsInput | string | null
+    bod?: NullableStringFieldUpdateOperationsInput | string | null
+    occupation?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: EnumGENDERFieldUpdateOperationsInput | $Enums.GENDER
     bloodGroup?: EnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup
+    activeDoner?: BoolFieldUpdateOperationsInput | boolean
     user?: UserUpdateOneRequiredWithoutProfileNestedInput
   }
 
@@ -7425,8 +7619,12 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: StringFieldUpdateOperationsInput | string
     weight?: IntFieldUpdateOperationsInput | number
+    img?: NullableStringFieldUpdateOperationsInput | string | null
+    bod?: NullableStringFieldUpdateOperationsInput | string | null
+    occupation?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: EnumGENDERFieldUpdateOperationsInput | $Enums.GENDER
     bloodGroup?: EnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup
+    activeDoner?: BoolFieldUpdateOperationsInput | boolean
     userId?: IntFieldUpdateOperationsInput | number
   }
 
@@ -7437,8 +7635,12 @@ export namespace Prisma {
     email?: string | null
     phoneNumber: string
     weight: number
+    img?: string | null
+    bod?: string | null
+    occupation?: string | null
     gender: $Enums.GENDER
     bloodGroup: $Enums.BloodGroup
+    activeDoner?: boolean
     userId: number
   }
 
@@ -7448,8 +7650,12 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: StringFieldUpdateOperationsInput | string
     weight?: IntFieldUpdateOperationsInput | number
+    img?: NullableStringFieldUpdateOperationsInput | string | null
+    bod?: NullableStringFieldUpdateOperationsInput | string | null
+    occupation?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: EnumGENDERFieldUpdateOperationsInput | $Enums.GENDER
     bloodGroup?: EnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup
+    activeDoner?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type ProfileUncheckedUpdateManyInput = {
@@ -7459,46 +7665,85 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: StringFieldUpdateOperationsInput | string
     weight?: IntFieldUpdateOperationsInput | number
+    img?: NullableStringFieldUpdateOperationsInput | string | null
+    bod?: NullableStringFieldUpdateOperationsInput | string | null
+    occupation?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: EnumGENDERFieldUpdateOperationsInput | $Enums.GENDER
     bloodGroup?: EnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup
+    activeDoner?: BoolFieldUpdateOperationsInput | boolean
     userId?: IntFieldUpdateOperationsInput | number
   }
 
   export type CredentialCreateInput = {
-    password: string
+    password?: string
+    randomPasswod?: boolean | null
+    isVerify?: boolean
+    otp?: number | null
+    otpTime?: Date | string | null
+    otpExp?: Date | string | null
     user: UserCreateNestedOneWithoutCredentialInput
   }
 
   export type CredentialUncheckedCreateInput = {
     id?: number
-    password: string
+    password?: string
+    randomPasswod?: boolean | null
+    isVerify?: boolean
+    otp?: number | null
+    otpTime?: Date | string | null
+    otpExp?: Date | string | null
     userId: number
   }
 
   export type CredentialUpdateInput = {
     password?: StringFieldUpdateOperationsInput | string
+    randomPasswod?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isVerify?: BoolFieldUpdateOperationsInput | boolean
+    otp?: NullableIntFieldUpdateOperationsInput | number | null
+    otpTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    otpExp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     user?: UserUpdateOneRequiredWithoutCredentialNestedInput
   }
 
   export type CredentialUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     password?: StringFieldUpdateOperationsInput | string
+    randomPasswod?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isVerify?: BoolFieldUpdateOperationsInput | boolean
+    otp?: NullableIntFieldUpdateOperationsInput | number | null
+    otpTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    otpExp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userId?: IntFieldUpdateOperationsInput | number
   }
 
   export type CredentialCreateManyInput = {
     id?: number
-    password: string
+    password?: string
+    randomPasswod?: boolean | null
+    isVerify?: boolean
+    otp?: number | null
+    otpTime?: Date | string | null
+    otpExp?: Date | string | null
     userId: number
   }
 
   export type CredentialUpdateManyMutationInput = {
     password?: StringFieldUpdateOperationsInput | string
+    randomPasswod?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isVerify?: BoolFieldUpdateOperationsInput | boolean
+    otp?: NullableIntFieldUpdateOperationsInput | number | null
+    otpTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    otpExp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type CredentialUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     password?: StringFieldUpdateOperationsInput | string
+    randomPasswod?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isVerify?: BoolFieldUpdateOperationsInput | boolean
+    otp?: NullableIntFieldUpdateOperationsInput | number | null
+    otpTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    otpExp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userId?: IntFieldUpdateOperationsInput | number
   }
 
@@ -7753,6 +7998,11 @@ export namespace Prisma {
     not?: NestedEnumBloodGroupFilter<$PrismaModel> | $Enums.BloodGroup
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type UserScalarRelationFilter = {
     is?: UserWhereInput
     isNot?: UserWhereInput
@@ -7770,8 +8020,12 @@ export namespace Prisma {
     email?: SortOrder
     phoneNumber?: SortOrder
     weight?: SortOrder
+    img?: SortOrder
+    bod?: SortOrder
+    occupation?: SortOrder
     gender?: SortOrder
     bloodGroup?: SortOrder
+    activeDoner?: SortOrder
     userId?: SortOrder
   }
 
@@ -7789,8 +8043,12 @@ export namespace Prisma {
     email?: SortOrder
     phoneNumber?: SortOrder
     weight?: SortOrder
+    img?: SortOrder
+    bod?: SortOrder
+    occupation?: SortOrder
     gender?: SortOrder
     bloodGroup?: SortOrder
+    activeDoner?: SortOrder
     userId?: SortOrder
   }
 
@@ -7801,8 +8059,12 @@ export namespace Prisma {
     email?: SortOrder
     phoneNumber?: SortOrder
     weight?: SortOrder
+    img?: SortOrder
+    bod?: SortOrder
+    occupation?: SortOrder
     gender?: SortOrder
     bloodGroup?: SortOrder
+    activeDoner?: SortOrder
     userId?: SortOrder
   }
 
@@ -7869,32 +8131,122 @@ export namespace Prisma {
     _max?: NestedEnumBloodGroupFilter<$PrismaModel>
   }
 
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type BoolNullableFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
+  }
+
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
   export type CredentialCountOrderByAggregateInput = {
     id?: SortOrder
     password?: SortOrder
+    randomPasswod?: SortOrder
+    isVerify?: SortOrder
+    otp?: SortOrder
+    otpTime?: SortOrder
+    otpExp?: SortOrder
     userId?: SortOrder
   }
 
   export type CredentialAvgOrderByAggregateInput = {
     id?: SortOrder
+    otp?: SortOrder
     userId?: SortOrder
   }
 
   export type CredentialMaxOrderByAggregateInput = {
     id?: SortOrder
     password?: SortOrder
+    randomPasswod?: SortOrder
+    isVerify?: SortOrder
+    otp?: SortOrder
+    otpTime?: SortOrder
+    otpExp?: SortOrder
     userId?: SortOrder
   }
 
   export type CredentialMinOrderByAggregateInput = {
     id?: SortOrder
     password?: SortOrder
+    randomPasswod?: SortOrder
+    isVerify?: SortOrder
+    otp?: SortOrder
+    otpTime?: SortOrder
+    otpExp?: SortOrder
     userId?: SortOrder
   }
 
   export type CredentialSumOrderByAggregateInput = {
     id?: SortOrder
+    otp?: SortOrder
     userId?: SortOrder
+  }
+
+  export type BoolNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedBoolNullableFilter<$PrismaModel>
+    _max?: NestedBoolNullableFilter<$PrismaModel>
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type AddressCountOrderByAggregateInput = {
@@ -8137,6 +8489,10 @@ export namespace Prisma {
     set?: $Enums.BloodGroup
   }
 
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
   export type UserUpdateOneRequiredWithoutProfileNestedInput = {
     create?: XOR<UserCreateWithoutProfileInput, UserUncheckedCreateWithoutProfileInput>
     connectOrCreate?: UserCreateOrConnectWithoutProfileInput
@@ -8149,6 +8505,22 @@ export namespace Prisma {
     create?: XOR<UserCreateWithoutCredentialInput, UserUncheckedCreateWithoutCredentialInput>
     connectOrCreate?: UserCreateOrConnectWithoutCredentialInput
     connect?: UserWhereUniqueInput
+  }
+
+  export type NullableBoolFieldUpdateOperationsInput = {
+    set?: boolean | null
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
   }
 
   export type UserUpdateOneRequiredWithoutCredentialNestedInput = {
@@ -8292,6 +8664,11 @@ export namespace Prisma {
     not?: NestedEnumBloodGroupFilter<$PrismaModel> | $Enums.BloodGroup
   }
 
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -8357,14 +8734,91 @@ export namespace Prisma {
     _max?: NestedEnumBloodGroupFilter<$PrismaModel>
   }
 
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type NestedBoolNullableFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
+  }
+
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type NestedBoolNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedBoolNullableFilter<$PrismaModel>
+    _max?: NestedBoolNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
   export type ProfileCreateWithoutUserInput = {
     fullName: string
     age: number
     email?: string | null
     phoneNumber: string
     weight: number
+    img?: string | null
+    bod?: string | null
+    occupation?: string | null
     gender: $Enums.GENDER
     bloodGroup: $Enums.BloodGroup
+    activeDoner?: boolean
   }
 
   export type ProfileUncheckedCreateWithoutUserInput = {
@@ -8374,8 +8828,12 @@ export namespace Prisma {
     email?: string | null
     phoneNumber: string
     weight: number
+    img?: string | null
+    bod?: string | null
+    occupation?: string | null
     gender: $Enums.GENDER
     bloodGroup: $Enums.BloodGroup
+    activeDoner?: boolean
   }
 
   export type ProfileCreateOrConnectWithoutUserInput = {
@@ -8384,12 +8842,22 @@ export namespace Prisma {
   }
 
   export type CredentialCreateWithoutUserInput = {
-    password: string
+    password?: string
+    randomPasswod?: boolean | null
+    isVerify?: boolean
+    otp?: number | null
+    otpTime?: Date | string | null
+    otpExp?: Date | string | null
   }
 
   export type CredentialUncheckedCreateWithoutUserInput = {
     id?: number
-    password: string
+    password?: string
+    randomPasswod?: boolean | null
+    isVerify?: boolean
+    otp?: number | null
+    otpTime?: Date | string | null
+    otpExp?: Date | string | null
   }
 
   export type CredentialCreateOrConnectWithoutUserInput = {
@@ -8455,8 +8923,12 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: StringFieldUpdateOperationsInput | string
     weight?: IntFieldUpdateOperationsInput | number
+    img?: NullableStringFieldUpdateOperationsInput | string | null
+    bod?: NullableStringFieldUpdateOperationsInput | string | null
+    occupation?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: EnumGENDERFieldUpdateOperationsInput | $Enums.GENDER
     bloodGroup?: EnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup
+    activeDoner?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type ProfileUncheckedUpdateWithoutUserInput = {
@@ -8466,8 +8938,12 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: StringFieldUpdateOperationsInput | string
     weight?: IntFieldUpdateOperationsInput | number
+    img?: NullableStringFieldUpdateOperationsInput | string | null
+    bod?: NullableStringFieldUpdateOperationsInput | string | null
+    occupation?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: EnumGENDERFieldUpdateOperationsInput | $Enums.GENDER
     bloodGroup?: EnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup
+    activeDoner?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type CredentialUpsertWithoutUserInput = {
@@ -8483,11 +8959,21 @@ export namespace Prisma {
 
   export type CredentialUpdateWithoutUserInput = {
     password?: StringFieldUpdateOperationsInput | string
+    randomPasswod?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isVerify?: BoolFieldUpdateOperationsInput | boolean
+    otp?: NullableIntFieldUpdateOperationsInput | number | null
+    otpTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    otpExp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type CredentialUncheckedUpdateWithoutUserInput = {
     id?: IntFieldUpdateOperationsInput | number
     password?: StringFieldUpdateOperationsInput | string
+    randomPasswod?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isVerify?: BoolFieldUpdateOperationsInput | boolean
+    otp?: NullableIntFieldUpdateOperationsInput | number | null
+    otpTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    otpExp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type AddressUpsertWithoutUserInput = {

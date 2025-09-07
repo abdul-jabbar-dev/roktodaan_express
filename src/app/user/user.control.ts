@@ -5,6 +5,7 @@ import { Prisma } from "../../prisma/app/generated/prisma/client";
 import { SendResponse } from "../../schema/Response/response";
 import { mapBloodGroupLabelToEnum } from "../../mapping/bloodGroup";
 import { GetUsersParams } from "../../types/user";
+import JWT from "../../lib/jwt";
 
 type GetCreateUserPayload = Prisma.UserGetPayload<{
   include: { profile: true; address: true; donationExperience: true };
@@ -14,7 +15,16 @@ export const createUserControl: RequestHandler = catchAsync(
     const result: GetCreateUserPayload = await USER_SERVICE.createUserService(
       req.body
     );
-    res.send(result);
+
+    res.send({
+      token: JWT.GenToken({
+        id: result.id,
+        fullName: result.profile?.fullName,
+        phoneNumber: result.profile?.phoneNumber,
+        createdAt: result.createdAt,
+      }),
+      user: result,
+    });
   }
 );
 
@@ -44,10 +54,42 @@ export const getUser: RequestHandler = catchAsync(async (req, res, next) => {
     SendResponse(res, result);
   } else next({ field: "User ID", message: "User ID Required" });
 });
+export const getMyProfile: RequestHandler = catchAsync(
+  async (req, res, next) => {
+    // Bearer e
+    const cookieToken = req.headers?.authorization;
+    if (!cookieToken) {
+      next({
+        message: "Authentication Failed Login in First",
+        field: "Auth Token Missing",
+      });
+    } else {
+      const token = cookieToken.split(" ")[1];
+      const result: GetCreateUserPayload | {} = await USER_SERVICE.getMyProfile(
+        token
+      );
+      SendResponse(res, result);
+    }
+  }
+);
+
+export const getExistUser: RequestHandler = catchAsync(
+  async (req, res, next) => {
+    const phoneNumber = req?.params?.number;
+    if (phoneNumber) {
+      const result: GetCreateUserPayload | {} = await USER_SERVICE.getExistUser(
+        phoneNumber
+      );
+      SendResponse(res, result);
+    } else next({ field: "User ID", message: "User ID Required" });
+  }
+);
 
 const USER_CONTROL = {
   createUserControl,
+  getExistUser,
   getUsers,
+  getMyProfile,
   getUser,
 };
 export default USER_CONTROL;

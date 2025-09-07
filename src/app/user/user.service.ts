@@ -4,7 +4,8 @@ import * as v from "valibot";
 import createUserSchema from "../../validators/createUser";
 import { mapBloodGroupLabelToEnum } from "../../mapping/bloodGroup";
 import { CUSTOM_VALIBOT } from "../../constant/error_cont";
-import { BloodGroup, Prisma } from "../../prisma/app/generated/prisma/client";
+import { Prisma } from "../../prisma/app/generated/prisma/client";
+import JWT from "../../lib/jwt";
 const createUserService = async (
   data: v.InferOutput<typeof createUserSchema>
 ) => {
@@ -12,6 +13,8 @@ const createUserService = async (
     const exist_user = await prisma.user.findFirst({
       where: { profile: { phoneNumber: data.profile.phoneNumber } },
     });
+
+    console.log(exist_user);
     if (exist_user?.id)
       throw {
         message: "Phone Number Already Exist!",
@@ -89,5 +92,51 @@ const getUserService = async (userId: string | number) => {
   }
 };
 
-const USER_SERVICE = { createUserService, getUsersService, getUserService };
+const getExistUser = async (phoneNumber: string) => {
+  try {
+    const user = await prisma.user.findFirst({
+      where: { profile: { phoneNumber } },
+
+      include: {
+        profile: true,
+      },
+    });
+    if (user?.id) {
+      return user;
+    } else {
+      throw new Error("No User Found!");
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+const getMyProfile = async (token: string) => {
+  try {
+    const info = JWT.DecToken(token);
+    const user = await prisma.user.findUnique({
+      where: { id: info?.id },
+      include: {
+        address: true,
+        donationExperience: true,
+        profile: true,
+        credential: { select: { randomPasswod: true, isVerify: true } },
+      },
+    });
+    if (user?.id) {
+      return user;
+    } else {
+      throw new Error("No User Found!");
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+const USER_SERVICE = {
+  createUserService,
+  getUsersService,
+  getUserService,
+  getExistUser,
+  getMyProfile,
+};
 export default USER_SERVICE;

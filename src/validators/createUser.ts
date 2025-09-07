@@ -1,5 +1,5 @@
 import * as v from "valibot";
-import {  GENDER } from "../prisma/app/generated/prisma/client";
+import { GENDER } from "../prisma/app/generated/prisma/client";
 
 const BloodGroupLabel = {
   A_POS: "A+",
@@ -13,6 +13,7 @@ const BloodGroupLabel = {
 } as const;
 
 const createUserSchema = v.object({
+  credential: v.object({ password: v.string() }),
   profile: v.object({
     fullName: v.string(),
     age: v.number(),
@@ -22,21 +23,19 @@ const createUserSchema = v.object({
     gender: v.enum(GENDER),
     bloodGroup: v.enum(BloodGroupLabel),
   }),
-  credential: v.object({
-    password: v.string(),
-  }),
   address: v.object({
-    area: v.nullable(v.string()), // optional
     division: v.string(),
     district: v.string(),
     upazila: v.string(),
   }),
-  donationExperience: v.array(
-    v.object({
-      lastDonationDate: v.string(),
-      lastDonationLocation: v.string(),
-    })
-  ),
+  donationExperience: v.optional(
+    v.array(
+      v.object({
+        lastDonationDate: v.string(),
+        lastDonationLocation: v.string(),
+      })
+    )
+  ) 
 });
 
 export default createUserSchema;

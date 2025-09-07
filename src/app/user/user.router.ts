@@ -11,5 +11,7 @@ userRouter.post(
   USER_CONTROL.createUserControl
 );
 userRouter.get("/get_users", USER_CONTROL.getUsers);
+userRouter.get("/me", USER_CONTROL.getMyProfile);
+userRouter.get("/exist_user/:number", USER_CONTROL.getExistUser);
 userRouter.get("/get_user/:user_id", USER_CONTROL.getUser);
 export default userRouter;

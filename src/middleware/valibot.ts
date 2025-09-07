@@ -14,9 +14,10 @@ const validatorMiddleware = <
 >(
   schema: T
 ): RequestHandler => {
-  return (req, res, next) => {
+  return (req, res, next) => { 
     const result = v.safeParse(schema as any, req.body, { abortEarly: false });
-
+ 
+    
     if (result.success) {
       req.body = result.output as v.InferOutput<T>;
       next();

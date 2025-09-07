@@ -133,14 +133,23 @@ exports.Prisma.ProfileScalarFieldEnum = {
   email: 'email',
   phoneNumber: 'phoneNumber',
   weight: 'weight',
+  img: 'img',
+  bod: 'bod',
+  occupation: 'occupation',
   gender: 'gender',
   bloodGroup: 'bloodGroup',
+  activeDoner: 'activeDoner',
   userId: 'userId'
 };
 
 exports.Prisma.CredentialScalarFieldEnum = {
   id: 'id',
   password: 'password',
+  randomPasswod: 'randomPasswod',
+  isVerify: 'isVerify',
+  otp: 'otp',
+  otpTime: 'otpTime',
+  otpExp: 'otpExp',
   userId: 'userId'
 };
 

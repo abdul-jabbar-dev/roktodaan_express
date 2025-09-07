@@ -41,16 +41,25 @@ model Profile {
   email       String?
   phoneNumber String     @unique
   weight      Int
+  img         String?
+  bod         String?
+  occupation  String?
   gender      GENDER
   bloodGroup  BloodGroup
+  activeDoner Boolean    @default(true)
 
   user   User @relation(fields: [userId], references: [id])
   userId Int  @unique
 }
 
 model Credential {
-  id       Int    @id @default(autoincrement())
-  password String
+  id            Int       @id @default(autoincrement())
+  password      String    @default(uuid())
+  randomPasswod Boolean?
+  isVerify      Boolean   @default(false)
+  otp           Int?
+  otpTime       DateTime?
+  otpExp        DateTime?
 
   user   User @relation(fields: [userId], references: [id])
   userId Int  @unique
