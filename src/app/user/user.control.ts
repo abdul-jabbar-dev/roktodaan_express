@@ -85,11 +85,62 @@ export const getExistUser: RequestHandler = catchAsync(
   }
 );
 
+export const updatePassword: RequestHandler = catchAsync(
+  async (req, res, next) => {
+    const cookieToken = req.headers?.authorization;
+    if (!cookieToken) {
+      next({
+        message: "Authentication Failed Login in First",
+        field: "Auth Token Missing",
+      });
+    } else {
+      const token = cookieToken.split(" ")[1];
+      if (typeof req?.body?.password !== "string") {
+        next({
+          message: "New Password Required",
+          field: "New Password Missing",
+        });
+      } else {
+        const result = await USER_SERVICE.updatePassword(
+          token,
+          req?.body?.password
+        );
+        SendResponse(res, result);
+      }
+    }
+  }
+);
+export const updateProfile: RequestHandler = catchAsync(
+  async (req, res, next) => {
+    const cookieToken = req.headers?.authorization;
+    if (!cookieToken) {
+      next({
+        message: "Authentication Failed Login in First",
+        field: "Auth Token Missing",
+      });
+    } else {
+      const token = cookieToken.split(" ")[1];
+      if (Object.keys(req?.body).length < 1) {
+        next({
+          message: "Update Info Required",
+          field: "New Profile Missing",
+        });
+      } else {
+        const result = await USER_SERVICE.updateProfile(token, req?.body);
+        console.log(result);
+        SendResponse(res, result);
+      }
+    }
+  }
+);
+
 const USER_CONTROL = {
   createUserControl,
   getExistUser,
   getUsers,
   getMyProfile,
   getUser,
+  updatePassword,
+  updateProfile,
 };
 export default USER_CONTROL;

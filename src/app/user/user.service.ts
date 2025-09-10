@@ -14,7 +14,6 @@ const createUserService = async (
       where: { profile: { phoneNumber: data.profile.phoneNumber } },
     });
 
-    console.log(exist_user);
     if (exist_user?.id)
       throw {
         message: "Phone Number Already Exist!",
@@ -132,11 +131,53 @@ const getMyProfile = async (token: string) => {
   }
 };
 
+const updatePassword = async (token: string, password: string) => {
+  try {
+    const info = JWT.DecToken(token);
+    const user = await prisma.user.update({
+      where: { id: info?.id },
+      select: { credential: true },
+      data: { credential: { update: { password, randomPasswod: false } } },
+    });
+    if (user?.credential?.id) {
+      return { status: true };
+    } else {
+      throw new Error("No User Found!");
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+const updateProfile = async (
+  token: string,
+  profoleData :Any
+) => {
+  try {
+    const info = JWT.DecToken(token);
+    console.log({...profoleData})
+    const user = await prisma.user.update({
+      where: { id: info?.id },
+      select: {  profile: true },
+      data: { profile:{update:{...(profoleData.profile)}}},
+    });
+    if (user?.profile?.id) {
+      return user;
+    } else {
+      throw new Error("No User Found!");
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
 const USER_SERVICE = {
   createUserService,
   getUsersService,
   getUserService,
   getExistUser,
+  updatePassword,
   getMyProfile,
+  updateProfile,
 };
 export default USER_SERVICE;

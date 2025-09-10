@@ -7,11 +7,21 @@ const userRouter = Express.Router();
 
 userRouter.post(
   "/create_user",
-  validatorMiddleware(createUserSchema),PasswordEncrypted(),
+  validatorMiddleware(createUserSchema),
+  PasswordEncrypted(),
   USER_CONTROL.createUserControl
 );
 userRouter.get("/get_users", USER_CONTROL.getUsers);
 userRouter.get("/me", USER_CONTROL.getMyProfile);
 userRouter.get("/exist_user/:number", USER_CONTROL.getExistUser);
 userRouter.get("/get_user/:user_id", USER_CONTROL.getUser);
+userRouter.put(
+  "/update_password",
+  PasswordEncrypted(),
+  USER_CONTROL.updatePassword
+);
+userRouter.put(
+  "/update_profile", 
+  USER_CONTROL.updateProfile
+);
 export default userRouter;
