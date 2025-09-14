@@ -3,8 +3,16 @@ import { BaseIssue } from "valibot";
 import { SendFiledError } from "../types/error";
 import SendErrorResponse from "../schema/Response/response";
 import { CUSTOM_VALIBOT, VALIBOT } from "../constant/error_cont";
+import { PrismaClientInitializationError } from "../prisma/app/generated/prisma/client/runtime/library";
 
 const GlobalError: ErrorRequestHandler = (error, req, res, next) => {
+  console.log(error);
+  if (error instanceof PrismaClientInitializationError) {
+    return res.status(500).json({
+      status: "Server Error",
+      message: "Database Connection Error",
+    });
+  }
   if (error?.from === CUSTOM_VALIBOT) {
     const errors: SendFiledError[] = [
       {

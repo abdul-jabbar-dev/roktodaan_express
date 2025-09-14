@@ -149,17 +149,14 @@ const updatePassword = async (token: string, password: string) => {
   }
 };
 
-const updateProfile = async (
-  token: string,
-  profoleData :Any
-) => {
+const updateProfile = async (token: string, profoleData: Any) => {
   try {
     const info = JWT.DecToken(token);
-    console.log({...profoleData})
+    console.log({ ...profoleData });
     const user = await prisma.user.update({
       where: { id: info?.id },
-      select: {  profile: true },
-      data: { profile:{update:{...(profoleData.profile)}}},
+      select: { profile: true },
+      data: { profile: { update: { ...profoleData.profile } } },
     });
     if (user?.profile?.id) {
       return user;
@@ -171,6 +168,62 @@ const updateProfile = async (
   }
 };
 
+const updateAddress = async (
+  token: string,
+  addressInfo: Prisma.AddressUpdateInput
+) => {
+  try {
+    const info = JWT.DecToken(token);
+
+    const user = await prisma.user.update({
+      where: { id: info?.id },
+      select: { address: true },
+      data: { address: { update: { ...addressInfo } } },
+    });
+    return user;
+  } catch (error) {
+    throw error;
+  }
+};
+const updateExperiance = async (
+  token: string,
+  experianceInfo: Prisma.DonationExperienceCreateManyUserInput
+) => {
+  try {
+    const info = JWT.DecToken(token);
+
+    // conditionally prepare data
+    let modi: any = {
+      donationExperience: {
+        create: experianceInfo,
+      },
+    };
+
+    if (experianceInfo.id) {
+      modi = {
+        donationExperience: {
+          update: {
+            where: { id: experianceInfo.id },
+            data: experianceInfo,
+          },
+        },
+      };
+    }
+
+    // now use modi
+    const user = await prisma.user.update({
+      where: { id: info?.id },
+      data: modi,
+      select: { donationExperience: true },
+    });
+
+    return user;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
 const USER_SERVICE = {
   createUserService,
   getUsersService,
@@ -179,5 +232,7 @@ const USER_SERVICE = {
   updatePassword,
   getMyProfile,
   updateProfile,
+  updateAddress,
+  updateExperiance,
 };
 export default USER_SERVICE;

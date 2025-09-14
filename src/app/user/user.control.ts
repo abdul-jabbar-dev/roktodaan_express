@@ -134,6 +134,54 @@ export const updateProfile: RequestHandler = catchAsync(
   }
 );
 
+export const updateAddress: RequestHandler = catchAsync(
+  async (req, res, next) => {
+    const cookieToken = req.headers?.authorization;
+    if (!cookieToken) {
+      next({
+        message: "Authentication Failed Login in First",
+        field: "Auth Token Missing",
+      });
+    } else {
+      const token = cookieToken.split(" ")[1];
+      if (Object.keys(req?.body).length < 1) {
+        next({
+          message: "Update Info Required",
+          field: "New Profile Missing",
+        });
+      } else {
+        const result = await USER_SERVICE.updateAddress(token, req?.body);
+        console.log(result);
+        SendResponse(res, result);
+      }
+    }
+  }
+);
+export const updateExperiance: RequestHandler = catchAsync(
+  async (req, res, next) => {
+    const cookieToken = req.headers?.authorization;
+    if (!cookieToken) {
+      next({
+        message: "Authentication Failed Login in First",
+        field: "Auth Token Missing",
+      });
+    } else {
+      const token = cookieToken.split(" ")[1];
+      if (Object.keys(req?.body).length < 1) {
+        next({
+          message: "Update Info Required",
+          field: "New Profile Missing",
+        });
+
+      } else {
+        const result = await USER_SERVICE.updateExperiance(token, req?.body);
+        console.log(result);
+        SendResponse(res, result);
+      }
+    }
+  }
+);
+
 const USER_CONTROL = {
   createUserControl,
   getExistUser,
@@ -142,5 +190,7 @@ const USER_CONTROL = {
   getUser,
   updatePassword,
   updateProfile,
+  updateAddress,
+  updateExperiance
 };
 export default USER_CONTROL;

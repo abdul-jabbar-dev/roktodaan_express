@@ -24,4 +24,13 @@ userRouter.put(
   "/update_profile", 
   USER_CONTROL.updateProfile
 );
+
+userRouter.put(
+  "/update_address", 
+  USER_CONTROL.updateAddress
+);
+userRouter.put(
+  "/update_experiance", 
+  USER_CONTROL.updateExperiance
+);
 export default userRouter;
