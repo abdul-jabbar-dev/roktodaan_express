@@ -182,6 +182,31 @@ export const updateExperiance: RequestHandler = catchAsync(
   }
 );
 
+export const sendOTP: RequestHandler = catchAsync(
+  async (req, res, next) => {
+    const cookieToken = req.headers?.authorization;
+    if (!cookieToken) {
+      next({
+        message: "Authentication Failed Login in First",
+        field: "Auth Token Missing",
+      });
+    } else {
+      const token = cookieToken.split(" ")[1];
+      if (typeof(req?.body?.phoneNumber)!=='string') {
+        next({
+          message: "Phone Number Info Required",
+          field: "Phone Number Missing",
+        });
+
+      } else {
+        const result = await USER_SERVICE.sendOTP(token, req?.body?.phoneNumber);
+        console.log(result);
+        SendResponse(res, result);
+      }
+    }
+  }
+);
+
 const USER_CONTROL = {
   createUserControl,
   getExistUser,
@@ -191,6 +216,7 @@ const USER_CONTROL = {
   updatePassword,
   updateProfile,
   updateAddress,
-  updateExperiance
+  updateExperiance,
+  sendOTP
 };
 export default USER_CONTROL;

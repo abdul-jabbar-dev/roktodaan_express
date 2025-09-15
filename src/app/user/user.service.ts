@@ -222,7 +222,35 @@ const updateExperiance = async (
     throw error;
   }
 };
+const sendOTP = async (token: string, phoneNumber: string) => {
+  try {
+    const info = JWT.DecToken(token);
 
+    const userIDStatus = await prisma.user.findUnique({
+      where: { id: info?.id },
+      select: { credential: true },
+    });
+    if (userIDStatus?.credential?.isVerify) {
+      new Error("Phone Number Already Verify!");
+    }
+
+    // make otp and logic
+    
+
+
+
+    // // now use modi
+    // const user = await prisma.user.update({
+    //   where: { id: info?.id },
+    //   data: modi,
+    //   select: { donationExperience: true },
+    // });
+
+    // return user;
+  } catch (error) {
+    throw error;
+  }
+};
 
 const USER_SERVICE = {
   createUserService,
@@ -234,5 +262,6 @@ const USER_SERVICE = {
   updateProfile,
   updateAddress,
   updateExperiance,
+  sendOTP,
 };
 export default USER_SERVICE;
