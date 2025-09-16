@@ -6,19 +6,22 @@ import { mapBloodGroupLabelToEnum } from "../../mapping/bloodGroup";
 import { CUSTOM_VALIBOT } from "../../constant/error_cont";
 import { Prisma } from "../../prisma/app/generated/prisma/client";
 import JWT from "../../lib/jwt";
+import { JwtPayload } from "jsonwebtoken";
+import sendOtpByEmail from "../../lib/supabase";
+import genOTP from "../../utils/genOTP";
 const createUserService = async (
   data: v.InferOutput<typeof createUserSchema>
 ) => {
   try {
     const exist_user = await prisma.user.findFirst({
-      where: { profile: { phoneNumber: data.profile.phoneNumber } },
+      where: { profile: { email: data.profile.email } },
     });
 
     if (exist_user?.id)
       throw {
-        message: "Phone Number Already Exist!",
+        message: "Email Already Exist!",
         from: CUSTOM_VALIBOT,
-        field: "phoneNumber",
+        field: "Email",
       };
     const createdUser: UserPayload = await prisma.user.create({
       data: {
@@ -91,10 +94,10 @@ const getUserService = async (userId: string | number) => {
   }
 };
 
-const getExistUser = async (phoneNumber: string) => {
+const getExistUser = async (email: string) => {
   try {
     const user = await prisma.user.findFirst({
-      where: { profile: { phoneNumber } },
+      where: { profile: { email } },
 
       include: {
         profile: true,
@@ -111,7 +114,7 @@ const getExistUser = async (phoneNumber: string) => {
 };
 const getMyProfile = async (token: string) => {
   try {
-    const info = JWT.DecToken(token);
+    const info = JWT.DecToken(token) as JwtPayload;
     const user = await prisma.user.findUnique({
       where: { id: info?.id },
       include: {
@@ -124,7 +127,7 @@ const getMyProfile = async (token: string) => {
     if (user?.id) {
       return user;
     } else {
-      throw new Error("No User Found!");
+      return new Error("No User Found!");
     }
   } catch (error) {
     throw error;
@@ -133,7 +136,7 @@ const getMyProfile = async (token: string) => {
 
 const updatePassword = async (token: string, password: string) => {
   try {
-    const info = JWT.DecToken(token);
+    const info = JWT.DecToken(token) as JwtPayload;
     const user = await prisma.user.update({
       where: { id: info?.id },
       select: { credential: true },
@@ -149,10 +152,10 @@ const updatePassword = async (token: string, password: string) => {
   }
 };
 
-const updateProfile = async (token: string, profoleData: Any) => {
+const updateProfile = async (token: string, profoleData: any) => {
   try {
-    const info = JWT.DecToken(token);
-    console.log({ ...profoleData });
+    const info = JWT.DecToken(token) as JwtPayload;
+
     const user = await prisma.user.update({
       where: { id: info?.id },
       select: { profile: true },
@@ -173,10 +176,10 @@ const updateAddress = async (
   addressInfo: Prisma.AddressUpdateInput
 ) => {
   try {
-    const info = JWT.DecToken(token);
+    const info = JWT.DecToken(token) as JwtPayload;
 
     const user = await prisma.user.update({
-      where: { id: info?.id },
+      where: { id: Number(info?.id) },
       select: { address: true },
       data: { address: { update: { ...addressInfo } } },
     });
@@ -190,7 +193,7 @@ const updateExperiance = async (
   experianceInfo: Prisma.DonationExperienceCreateManyUserInput
 ) => {
   try {
-    const info = JWT.DecToken(token);
+    const info = JWT.DecToken(token) as JwtPayload;
 
     // conditionally prepare data
     let modi: any = {
@@ -222,31 +225,67 @@ const updateExperiance = async (
     throw error;
   }
 };
-const sendOTP = async (token: string, phoneNumber: string) => {
+const sendOTP = async (token: string, email: string) => {
   try {
-    const info = JWT.DecToken(token);
+    const info = JWT.DecToken(token) as JwtPayload;
 
     const userIDStatus = await prisma.user.findUnique({
       where: { id: info?.id },
       select: { credential: true },
     });
     if (userIDStatus?.credential?.isVerify) {
-      new Error("Phone Number Already Verify!");
+      new Error("Email Already Verify!");
+    }
+    const res = await sendOtpByEmail(email, genOTP());
+    if (res?.messageId) {
+      await prisma.user.update({
+        where: { id: info?.id },
+        data: {
+          credential: {
+            update: {
+              otp: res?.otp,
+              otpExp: new Date(Date.now() + 1000 * 60 * 5),
+            },
+          },
+        },
+      });
+      return { status: true };
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+const verifyOTP = async (token: string, otp: string | number) => {
+  try {
+    const info = JWT.DecToken(token) as JwtPayload;
+
+    const userIDStatus = await prisma.user.findUnique({
+      where: { id: info?.id },
+      select: { credential: true, profile: true },
+    });
+
+    console.log(userIDStatus, otp);
+    if (!userIDStatus?.profile?.email) {
+      return {msg:"Email Not Found!"};
     }
 
-    // make otp and logic
-    
-
-
-
-    // // now use modi
-    // const user = await prisma.user.update({
-    //   where: { id: info?.id },
-    //   data: modi,
-    //   select: { donationExperience: true },
-    // });
-
-    // return user;
+    if (userIDStatus?.credential?.otp !== otp) {
+      return {msg:"OTP Not Match!"};
+    }
+    if ((userIDStatus?.credential?.otpExp as Date) < new Date()) {
+      return {msg:"OTP Expired!"};
+    }
+    await prisma.user.update({
+      where: { id: info?.id },
+      data: {
+        credential: {
+          update: {
+            isVerify: true,
+          },
+        },
+      },
+    });
   } catch (error) {
     throw error;
   }
@@ -263,5 +302,6 @@ const USER_SERVICE = {
   updateAddress,
   updateExperiance,
   sendOTP,
+  verifyOTP,
 };
 export default USER_SERVICE;

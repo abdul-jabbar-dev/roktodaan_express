@@ -2661,7 +2661,7 @@ export namespace Prisma {
     id: number
     fullName: string
     age: number
-    email: string | null
+    email: string
     phoneNumber: string
     weight: number
     img: string | null
@@ -2779,7 +2779,7 @@ export namespace Prisma {
       id: number
       fullName: string
       age: number
-      email: string | null
+      email: string
       phoneNumber: string
       weight: number
       img: string | null
@@ -7235,7 +7235,7 @@ export namespace Prisma {
     id?: IntFilter<"Profile"> | number
     fullName?: StringFilter<"Profile"> | string
     age?: IntFilter<"Profile"> | number
-    email?: StringNullableFilter<"Profile"> | string | null
+    email?: StringFilter<"Profile"> | string
     phoneNumber?: StringFilter<"Profile"> | string
     weight?: IntFilter<"Profile"> | number
     img?: StringNullableFilter<"Profile"> | string | null
@@ -7252,7 +7252,7 @@ export namespace Prisma {
     id?: SortOrder
     fullName?: SortOrder
     age?: SortOrder
-    email?: SortOrderInput | SortOrder
+    email?: SortOrder
     phoneNumber?: SortOrder
     weight?: SortOrder
     img?: SortOrderInput | SortOrder
@@ -7267,14 +7267,14 @@ export namespace Prisma {
 
   export type ProfileWhereUniqueInput = Prisma.AtLeast<{
     id?: number
-    phoneNumber?: string
+    email?: string
     userId?: number
     AND?: ProfileWhereInput | ProfileWhereInput[]
     OR?: ProfileWhereInput[]
     NOT?: ProfileWhereInput | ProfileWhereInput[]
     fullName?: StringFilter<"Profile"> | string
     age?: IntFilter<"Profile"> | number
-    email?: StringNullableFilter<"Profile"> | string | null
+    phoneNumber?: StringFilter<"Profile"> | string
     weight?: IntFilter<"Profile"> | number
     img?: StringNullableFilter<"Profile"> | string | null
     bod?: StringNullableFilter<"Profile"> | string | null
@@ -7283,13 +7283,13 @@ export namespace Prisma {
     bloodGroup?: EnumBloodGroupFilter<"Profile"> | $Enums.BloodGroup
     activeDoner?: BoolFilter<"Profile"> | boolean
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
-  }, "id" | "phoneNumber" | "userId">
+  }, "id" | "email" | "userId">
 
   export type ProfileOrderByWithAggregationInput = {
     id?: SortOrder
     fullName?: SortOrder
     age?: SortOrder
-    email?: SortOrderInput | SortOrder
+    email?: SortOrder
     phoneNumber?: SortOrder
     weight?: SortOrder
     img?: SortOrderInput | SortOrder
@@ -7313,7 +7313,7 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"Profile"> | number
     fullName?: StringWithAggregatesFilter<"Profile"> | string
     age?: IntWithAggregatesFilter<"Profile"> | number
-    email?: StringNullableWithAggregatesFilter<"Profile"> | string | null
+    email?: StringWithAggregatesFilter<"Profile"> | string
     phoneNumber?: StringWithAggregatesFilter<"Profile"> | string
     weight?: IntWithAggregatesFilter<"Profile"> | number
     img?: StringNullableWithAggregatesFilter<"Profile"> | string | null
@@ -7569,7 +7569,7 @@ export namespace Prisma {
   export type ProfileCreateInput = {
     fullName: string
     age: number
-    email?: string | null
+    email: string
     phoneNumber: string
     weight: number
     img?: string | null
@@ -7585,7 +7585,7 @@ export namespace Prisma {
     id?: number
     fullName: string
     age: number
-    email?: string | null
+    email: string
     phoneNumber: string
     weight: number
     img?: string | null
@@ -7600,7 +7600,7 @@ export namespace Prisma {
   export type ProfileUpdateInput = {
     fullName?: StringFieldUpdateOperationsInput | string
     age?: IntFieldUpdateOperationsInput | number
-    email?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
     phoneNumber?: StringFieldUpdateOperationsInput | string
     weight?: IntFieldUpdateOperationsInput | number
     img?: NullableStringFieldUpdateOperationsInput | string | null
@@ -7616,7 +7616,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     fullName?: StringFieldUpdateOperationsInput | string
     age?: IntFieldUpdateOperationsInput | number
-    email?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
     phoneNumber?: StringFieldUpdateOperationsInput | string
     weight?: IntFieldUpdateOperationsInput | number
     img?: NullableStringFieldUpdateOperationsInput | string | null
@@ -7632,7 +7632,7 @@ export namespace Prisma {
     id?: number
     fullName: string
     age: number
-    email?: string | null
+    email: string
     phoneNumber: string
     weight: number
     img?: string | null
@@ -7647,7 +7647,7 @@ export namespace Prisma {
   export type ProfileUpdateManyMutationInput = {
     fullName?: StringFieldUpdateOperationsInput | string
     age?: IntFieldUpdateOperationsInput | number
-    email?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
     phoneNumber?: StringFieldUpdateOperationsInput | string
     weight?: IntFieldUpdateOperationsInput | number
     img?: NullableStringFieldUpdateOperationsInput | string | null
@@ -7662,7 +7662,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     fullName?: StringFieldUpdateOperationsInput | string
     age?: IntFieldUpdateOperationsInput | number
-    email?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
     phoneNumber?: StringFieldUpdateOperationsInput | string
     weight?: IntFieldUpdateOperationsInput | number
     img?: NullableStringFieldUpdateOperationsInput | string | null
@@ -8810,7 +8810,7 @@ export namespace Prisma {
   export type ProfileCreateWithoutUserInput = {
     fullName: string
     age: number
-    email?: string | null
+    email: string
     phoneNumber: string
     weight: number
     img?: string | null
@@ -8825,7 +8825,7 @@ export namespace Prisma {
     id?: number
     fullName: string
     age: number
-    email?: string | null
+    email: string
     phoneNumber: string
     weight: number
     img?: string | null
@@ -8920,7 +8920,7 @@ export namespace Prisma {
   export type ProfileUpdateWithoutUserInput = {
     fullName?: StringFieldUpdateOperationsInput | string
     age?: IntFieldUpdateOperationsInput | number
-    email?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
     phoneNumber?: StringFieldUpdateOperationsInput | string
     weight?: IntFieldUpdateOperationsInput | number
     img?: NullableStringFieldUpdateOperationsInput | string | null
@@ -8935,7 +8935,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     fullName?: StringFieldUpdateOperationsInput | string
     age?: IntFieldUpdateOperationsInput | number
-    email?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
     phoneNumber?: StringFieldUpdateOperationsInput | string
     weight?: IntFieldUpdateOperationsInput | number
     img?: NullableStringFieldUpdateOperationsInput | string | null

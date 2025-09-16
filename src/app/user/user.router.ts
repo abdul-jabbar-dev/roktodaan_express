@@ -34,7 +34,11 @@ userRouter.put(
   USER_CONTROL.updateExperiance
 );
 userRouter.post(
-  "/num_verify_send_otp", 
+  "/email_verify_send_otp", 
   USER_CONTROL.sendOTP
+);
+userRouter.post(
+  "/email_verify_otp", 
+  USER_CONTROL.verifyOTP
 );
 export default userRouter;

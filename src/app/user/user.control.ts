@@ -5,7 +5,7 @@ import { Prisma } from "../../prisma/app/generated/prisma/client";
 import { SendResponse } from "../../schema/Response/response";
 import { mapBloodGroupLabelToEnum } from "../../mapping/bloodGroup";
 import { GetUsersParams } from "../../types/user";
-import JWT from "../../lib/jwt";
+import JWT from "../../lib/jwt"; 
 
 type GetCreateUserPayload = Prisma.UserGetPayload<{
   include: { profile: true; address: true; donationExperience: true };
@@ -21,6 +21,7 @@ export const createUserControl: RequestHandler = catchAsync(
         id: result.id,
         fullName: result.profile?.fullName,
         phoneNumber: result.profile?.phoneNumber,
+        email:result.profile?.email,
         createdAt: result.createdAt,
       }),
       user: result,
@@ -75,10 +76,10 @@ export const getMyProfile: RequestHandler = catchAsync(
 
 export const getExistUser: RequestHandler = catchAsync(
   async (req, res, next) => {
-    const phoneNumber = req?.params?.number;
-    if (phoneNumber) {
+    const email = req?.params?.email;
+    if (email) {
       const result: GetCreateUserPayload | {} = await USER_SERVICE.getExistUser(
-        phoneNumber
+        email
       );
       SendResponse(res, result);
     } else next({ field: "User ID", message: "User ID Required" });
@@ -184,6 +185,7 @@ export const updateExperiance: RequestHandler = catchAsync(
 
 export const sendOTP: RequestHandler = catchAsync(
   async (req, res, next) => {
+    console.log(req.body)
     const cookieToken = req.headers?.authorization;
     if (!cookieToken) {
       next({
@@ -192,14 +194,39 @@ export const sendOTP: RequestHandler = catchAsync(
       });
     } else {
       const token = cookieToken.split(" ")[1];
-      if (typeof(req?.body?.phoneNumber)!=='string') {
+      if (typeof(req?.body?.email)!=='string') {
         next({
-          message: "Phone Number Info Required",
-          field: "Phone Number Missing",
+          message: "Email Info Required",
+          field: "Email Missing",
         });
 
       } else {
-        const result = await USER_SERVICE.sendOTP(token, req?.body?.phoneNumber);
+        const result = await USER_SERVICE.sendOTP(token, req?.body?.email);
+        console.log(result);
+        SendResponse(res, result);
+      }
+    }
+  }
+);
+
+export const verifyOTP: RequestHandler = catchAsync(
+  async (req, res, next) => {
+ 
+    const cookieToken = req.headers?.authorization;
+    if (!cookieToken) {
+      next({
+        message: "Authentication Failed Login in First",
+        field: "Auth Token Missing",
+      });
+    } else {
+      const token = cookieToken.split(" ")[1];
+      if (typeof(req?.body?.otp)!=='string') {
+        next({
+          message: "OTP Info Required",
+          field: "OTP Missing",
+        }); 
+      } else {
+        const result = await USER_SERVICE.verifyOTP(token, Number(req?.body?.otp));
         console.log(result);
         SendResponse(res, result);
       }
@@ -217,6 +244,7 @@ const USER_CONTROL = {
   updateProfile,
   updateAddress,
   updateExperiance,
-  sendOTP
+  sendOTP,
+  verifyOTP
 };
 export default USER_CONTROL;

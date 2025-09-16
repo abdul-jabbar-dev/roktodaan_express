@@ -18,11 +18,15 @@ CREATE TABLE "public"."Profile" (
     "id" SERIAL NOT NULL,
     "fullName" TEXT NOT NULL,
     "age" INTEGER NOT NULL,
-    "email" TEXT,
+    "email" TEXT NOT NULL,
     "phoneNumber" TEXT NOT NULL,
     "weight" INTEGER NOT NULL,
+    "img" TEXT,
+    "bod" TEXT,
+    "occupation" TEXT,
     "gender" "public"."GENDER" NOT NULL,
     "bloodGroup" "public"."BloodGroup" NOT NULL,
+    "activeDoner" BOOLEAN NOT NULL DEFAULT true,
     "userId" INTEGER NOT NULL,
 
     CONSTRAINT "Profile_pkey" PRIMARY KEY ("id")
@@ -32,6 +36,11 @@ CREATE TABLE "public"."Profile" (
 CREATE TABLE "public"."Credential" (
     "id" SERIAL NOT NULL,
     "password" TEXT NOT NULL,
+    "randomPasswod" BOOLEAN,
+    "isVerify" BOOLEAN NOT NULL DEFAULT false,
+    "otp" INTEGER,
+    "otpTime" TIMESTAMP(3),
+    "otpExp" TIMESTAMP(3),
     "userId" INTEGER NOT NULL,
 
     CONSTRAINT "Credential_pkey" PRIMARY KEY ("id")
@@ -58,6 +67,12 @@ CREATE TABLE "public"."DonationExperience" (
 
     CONSTRAINT "DonationExperience_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Profile_email_key" ON "public"."Profile"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Profile_phoneNumber_key" ON "public"."Profile"("phoneNumber");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Profile_userId_key" ON "public"."Profile"("userId");

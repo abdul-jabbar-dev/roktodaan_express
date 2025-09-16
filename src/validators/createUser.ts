@@ -17,7 +17,7 @@ const createUserSchema = v.object({
   profile: v.object({
     fullName: v.string(),
     age: v.number(),
-    email: v.nullable(v.string()), // optional
+    email: v.string(),
     phoneNumber: v.string(),
     weight: v.number(),
     gender: v.enum(GENDER),
@@ -35,7 +35,7 @@ const createUserSchema = v.object({
         lastDonationLocation: v.string(),
       })
     )
-  ) 
+  ),
 });
 
 export default createUserSchema;
