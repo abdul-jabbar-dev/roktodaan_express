@@ -6,7 +6,7 @@ CREATE TYPE "public"."BloodGroup" AS ENUM ('A+', 'A-', 'B+', 'B-', 'O+', 'O-', '
 
 -- CreateTable
 CREATE TABLE "public"."User" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -15,7 +15,7 @@ CREATE TABLE "public"."User" (
 
 -- CreateTable
 CREATE TABLE "public"."Profile" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "fullName" TEXT NOT NULL,
     "age" INTEGER NOT NULL,
     "email" TEXT NOT NULL,
@@ -27,52 +27,49 @@ CREATE TABLE "public"."Profile" (
     "gender" "public"."GENDER" NOT NULL,
     "bloodGroup" "public"."BloodGroup" NOT NULL,
     "activeDoner" BOOLEAN NOT NULL DEFAULT true,
-    "userId" INTEGER NOT NULL,
+    "userId" TEXT NOT NULL,
 
     CONSTRAINT "Profile_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "public"."Credential" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "randomPasswod" BOOLEAN,
     "isVerify" BOOLEAN NOT NULL DEFAULT false,
     "otp" INTEGER,
     "otpTime" TIMESTAMP(3),
     "otpExp" TIMESTAMP(3),
-    "userId" INTEGER NOT NULL,
+    "userId" TEXT NOT NULL,
 
     CONSTRAINT "Credential_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "public"."Address" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "area" TEXT,
     "division" TEXT NOT NULL,
     "district" TEXT NOT NULL,
     "upazila" TEXT NOT NULL,
-    "userId" INTEGER NOT NULL,
+    "userId" TEXT NOT NULL,
 
     CONSTRAINT "Address_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "public"."DonationExperience" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "lastDonationDate" TEXT NOT NULL,
     "lastDonationLocation" TEXT NOT NULL,
-    "userId" INTEGER NOT NULL,
+    "userId" TEXT NOT NULL,
 
     CONSTRAINT "DonationExperience_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Profile_email_key" ON "public"."Profile"("email");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Profile_phoneNumber_key" ON "public"."Profile"("phoneNumber");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Profile_userId_key" ON "public"."Profile"("userId");

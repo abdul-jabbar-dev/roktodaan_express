@@ -9,6 +9,7 @@ import JWT from "../../lib/jwt";
 import { JwtPayload } from "jsonwebtoken";
 import sendOtpByEmail from "../../lib/supabase";
 import genOTP from "../../utils/genOTP";
+import { comparePassword } from "../../lib/bycrypt";
 const createUserService = async (
   data: v.InferOutput<typeof createUserSchema>
 ) => {
@@ -73,21 +74,21 @@ const getUsersService = async (params?: GetUsersParams) => {
   }
 };
 
-const getUserService = async (userId: string | number) => {
+const getUserService = async (userId: string) => {
   try {
     const user = await prisma.user.findUnique({
-      where: { id: Number(userId) },
-
+      where: { id: userId },
       include: {
         address: true,
         donationExperience: true,
         profile: true,
+        credential: { select: { randomPasswod: true, isVerify: true } },
       },
     });
     if (user?.id) {
       return user;
     } else {
-      return {};
+      throw new Error("No User Found!");
     }
   } catch (error) {
     throw error;
@@ -179,7 +180,7 @@ const updateAddress = async (
     const info = JWT.DecToken(token) as JwtPayload;
 
     const user = await prisma.user.update({
-      where: { id: Number(info?.id) },
+      where: { id: info?.id },
       select: { address: true },
       data: { address: { update: { ...addressInfo } } },
     });
@@ -267,14 +268,14 @@ const verifyOTP = async (token: string, otp: string | number) => {
 
     console.log(userIDStatus, otp);
     if (!userIDStatus?.profile?.email) {
-      return {msg:"Email Not Found!"};
+      return { msg: "Email Not Found!" };
     }
 
     if (userIDStatus?.credential?.otp !== otp) {
-      return {msg:"OTP Not Match!"};
+      return { msg: "OTP Not Match!" };
     }
     if ((userIDStatus?.credential?.otpExp as Date) < new Date()) {
-      return {msg:"OTP Expired!"};
+      return { msg: "OTP Expired!" };
     }
     await prisma.user.update({
       where: { id: info?.id },
@@ -291,6 +292,30 @@ const verifyOTP = async (token: string, otp: string | number) => {
   }
 };
 
+const login = async (email: string, password: string) => {
+  try {
+    const existUser = await prisma.user.findFirst({
+      where: { profile: { email } },
+      include: { credential: true, profile: true },
+    });
+
+    if (!existUser) {
+      return null; // email নাই
+    }
+
+    if (!comparePassword(password, existUser.credential?.password || "")) {
+      return null; // password mismatch
+    }
+
+    return existUser; // শুধু user ফেরত দিচ্ছে
+  } catch (error) {
+    throw error;
+  }
+};
+
+ 
+
+
 const USER_SERVICE = {
   createUserService,
   getUsersService,
@@ -303,5 +328,6 @@ const USER_SERVICE = {
   updateExperiance,
   sendOTP,
   verifyOTP,
+  login,
 };
 export default USER_SERVICE;

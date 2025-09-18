@@ -12,8 +12,10 @@ userRouter.post(
   USER_CONTROL.createUserControl
 );
 userRouter.get("/get_users", USER_CONTROL.getUsers);
+userRouter.get("/get_user/:id", USER_CONTROL.getUser);
 userRouter.get("/me", USER_CONTROL.getMyProfile);
 userRouter.get("/exist_user/:number", USER_CONTROL.getExistUser);
+userRouter.post("/login", USER_CONTROL.login);
 userRouter.get("/get_user/:user_id", USER_CONTROL.getUser);
 userRouter.put(
   "/update_password",
