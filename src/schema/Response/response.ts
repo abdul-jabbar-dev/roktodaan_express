@@ -5,6 +5,7 @@ const SendErrorResponse = (res: Response, issue: SendErrorPayload) => {
   const error: SendError = {
     status: false,
     error: issue,
+
   };
   res.send(error);
 };

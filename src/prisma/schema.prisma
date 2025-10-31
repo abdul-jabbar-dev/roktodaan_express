@@ -5,7 +5,8 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 enum GENDER {
@@ -33,7 +34,10 @@ model User {
   createdAt          DateTime             @default(now())
   updatedAt          DateTime             @updatedAt
 }
-
+enum otpType {
+  emailVerification
+  passwordReset
+}
 model Profile {
    id       String     @id @default(uuid())
   fullName    String
@@ -59,6 +63,7 @@ model Credential {
   isVerify      Boolean   @default(false)
   otp           Int?
   otpTime       DateTime?
+  otpType       otpType?
   otpExp        DateTime?
 
   user   User @relation(fields: [userId], references: [id])
@@ -82,4 +87,16 @@ model DonationExperience {
 
   user   User @relation(fields: [userId], references: [id])
   userId String
+}
+
+
+model BlacklistToken {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique       // JWT string
+  reason    String?                // optional: logout, password_reset, otp
+  userEmail String?                // optional: related user
+  createdAt DateTime @default(now())
+  expiresAt DateTime                // token expiry timestamp
+
+  @@index([expiresAt])              // cleanup queries fast
 }

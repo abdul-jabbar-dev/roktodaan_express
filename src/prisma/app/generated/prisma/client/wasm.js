@@ -149,6 +149,7 @@ exports.Prisma.CredentialScalarFieldEnum = {
   isVerify: 'isVerify',
   otp: 'otp',
   otpTime: 'otpTime',
+  otpType: 'otpType',
   otpExp: 'otpExp',
   userId: 'userId'
 };
@@ -167,6 +168,15 @@ exports.Prisma.DonationExperienceScalarFieldEnum = {
   lastDonationDate: 'lastDonationDate',
   lastDonationLocation: 'lastDonationLocation',
   userId: 'userId'
+};
+
+exports.Prisma.BlacklistTokenScalarFieldEnum = {
+  id: 'id',
+  token: 'token',
+  reason: 'reason',
+  userEmail: 'userEmail',
+  createdAt: 'createdAt',
+  expiresAt: 'expiresAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -199,12 +209,18 @@ exports.BloodGroup = exports.$Enums.BloodGroup = {
   AB_NEG: 'AB_NEG'
 };
 
+exports.otpType = exports.$Enums.otpType = {
+  emailVerification: 'emailVerification',
+  passwordReset: 'passwordReset'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   Profile: 'Profile',
   Credential: 'Credential',
   Address: 'Address',
-  DonationExperience: 'DonationExperience'
+  DonationExperience: 'DonationExperience',
+  BlacklistToken: 'BlacklistToken'
 };
 
 /**

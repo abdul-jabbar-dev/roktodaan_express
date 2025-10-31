@@ -1,11 +1,14 @@
 import { RequestHandler } from "express";
 import catchAsync from "../../utils/catchAsync";
 import USER_SERVICE from "./user.service";
-import { Prisma } from "../../prisma/app/generated/prisma/client";
+import { otpType, Prisma } from "../../prisma/app/generated/prisma/client";
 import { SendResponse } from "../../schema/Response/response";
 import { mapBloodGroupLabelToEnum } from "../../mapping/bloodGroup";
 import { GetUsersParams } from "../../types/user";
 import JWT from "../../lib/jwt";
+import { JwtPayload } from "jsonwebtoken";
+import prisma from "../../connection/db";
+import { forgetPasswordJWT_session } from "../../constant/jwt_payload_const";
 
 type GetCreateUserPayload = Prisma.UserGetPayload<{
   include: { profile: true; address: true; donationExperience: true };
@@ -59,16 +62,15 @@ export const getUser: RequestHandler = catchAsync(async (req, res, next) => {
 export const getMyProfile: RequestHandler = catchAsync(
   async (req, res, next) => {
     // Bearer e
-    const cookieToken = req.headers?.authorization;
-    if (!cookieToken) {
+
+    if (!req.token) {
       next({
         message: "Authentication Failed Login in First",
         field: "Auth Token Missing",
       });
     } else {
-      const token = cookieToken.split(" ")[1];
       const result: GetCreateUserPayload | {} = await USER_SERVICE.getMyProfile(
-        token
+        req.token
       );
       SendResponse(res, result);
     }
@@ -89,14 +91,12 @@ export const getExistUser: RequestHandler = catchAsync(
 
 export const updatePassword: RequestHandler = catchAsync(
   async (req, res, next) => {
-    const cookieToken = req.headers?.authorization;
-    if (!cookieToken) {
+    if (!req.token) {
       next({
         message: "Authentication Failed Login in First",
         field: "Auth Token Missing",
       });
-    } else {
-      const token = cookieToken.split(" ")[1];
+    } else { 
       if (typeof req?.body?.password !== "string") {
         next({
           message: "New Password Required",
@@ -104,7 +104,7 @@ export const updatePassword: RequestHandler = catchAsync(
         });
       } else {
         const result = await USER_SERVICE.updatePassword(
-          token,
+          req.token,
           req?.body?.password
         );
         SendResponse(res, result);
@@ -114,44 +114,41 @@ export const updatePassword: RequestHandler = catchAsync(
 );
 export const updateProfile: RequestHandler = catchAsync(
   async (req, res, next) => {
-    const cookieToken = req.headers?.authorization;
-    if (!cookieToken) {
+    if (!req.token) {
       next({
         message: "Authentication Failed Login in First",
         field: "Auth Token Missing",
       });
     } else {
-      const token = cookieToken.split(" ")[1];
       if (Object.keys(req?.body).length < 1) {
         next({
           message: "Update Info Required",
           field: "New Profile Missing",
         });
       } else {
-        const result = await USER_SERVICE.updateProfile(token, req?.body); 
+        const result = await USER_SERVICE.updateProfile(req.token, req?.body);
         SendResponse(res, result);
       }
     }
   }
 );
 
+
 export const updateAddress: RequestHandler = catchAsync(
   async (req, res, next) => {
-    const cookieToken = req.headers?.authorization;
-    if (!cookieToken) {
+    if (!req.token) {
       next({
         message: "Authentication Failed Login in First",
         field: "Auth Token Missing",
       });
     } else {
-      const token = cookieToken.split(" ")[1];
       if (Object.keys(req?.body).length < 1) {
         next({
           message: "Update Info Required",
           field: "New Profile Missing",
         });
       } else {
-        const result = await USER_SERVICE.updateAddress(token, req?.body); 
+        const result = await USER_SERVICE.updateAddress(req.token, req?.body);
         SendResponse(res, result);
       }
     }
@@ -159,58 +156,99 @@ export const updateAddress: RequestHandler = catchAsync(
 );
 export const updateExperiance: RequestHandler = catchAsync(
   async (req, res, next) => {
-    const cookieToken = req.headers?.authorization;
-    if (!cookieToken) {
+    if (!req.token) {
       next({
         message: "Authentication Failed Login in First",
         field: "Auth Token Missing",
       });
     } else {
-      const token = cookieToken.split(" ")[1];
       if (Object.keys(req?.body).length < 1) {
         next({
           message: "Update Info Required",
           field: "New Profile Missing",
         });
       } else {
-        const result = await USER_SERVICE.updateExperiance(token, req?.body); 
+        const result = await USER_SERVICE.updateExperience(
+          req.token,
+          req?.body
+        );
         SendResponse(res, result);
       }
     }
   }
 );
-
-export const sendOTP: RequestHandler = catchAsync(async (req, res, next) => {
- 
-  const cookieToken = req.headers?.authorization;
-  if (!cookieToken) {
-    next({
-      message: "Authentication Failed Login in First",
-      field: "Auth Token Missing",
-    });
-  } else {
-    const token = cookieToken.split(" ")[1];
+export const forgetPassword: RequestHandler = catchAsync(
+  async (req, res, next) => {
     if (typeof req?.body?.email !== "string") {
       next({
         message: "Email Info Required",
         field: "Email Missing",
       });
     } else {
-      const result = await USER_SERVICE.sendOTP(token, req?.body?.email); 
-      SendResponse(res, result);
+      const { status } = await USER_SERVICE.forgetPassword(req?.body?.email);
+      if (!status) throw new Error("Failed to send forget password email!");
+
+      // Genarate JWT Session Token
+      const session_token = JWT.GenToken(
+        forgetPasswordJWT_session.payload({
+          email: req.body.email,
+          otpStatus: "pending",
+          step: "otp_sent",
+        }),
+        { expiresIn: forgetPasswordJWT_session.expiresIn }
+      );
+
+      res.cookie("session_token", session_token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
+        maxAge: 5 * 60 * 1000,
+      });
+
+      SendResponse(res, { session_token, status });
     }
   }
-});
+);
 
-export const verifyOTP: RequestHandler = catchAsync(async (req, res, next) => {
-  const cookieToken = req.headers?.authorization;
-  if (!cookieToken) {
+export const sendOTP: RequestHandler = catchAsync(async (req, res, next) => {
+  if (!req.token) {
     next({
       message: "Authentication Failed Login in First",
       field: "Auth Token Missing",
     });
   } else {
-    const token = cookieToken.split(" ")[1];
+    if (typeof req?.body?.email !== "string") {
+      next({
+        message: "Email Info Required",
+        field: "Email Missing",
+      });
+    } else {
+      const info = JWT.DecToken(req.token) as JwtPayload;
+
+      const userIDStatus: any = await prisma.user.findUnique({
+        where: { id: info?.id },
+        select: { credential: true },
+      });
+      if (userIDStatus?.credential?.isVerify) {
+        new Error("Email Already Verify!");
+      } 
+      const result = await USER_SERVICE.sendOTP(
+        "emailVerification",
+        info?.id as string,
+        req?.body?.email
+      );
+      SendResponse(res, result);
+    }
+  }
+});
+export const verifyOTP: RequestHandler = catchAsync(async (req, res, next) => {
+  const otpType = req?.query.otpType as otpType; 
+  if (!req.token) {
+    next({
+      message: "Authentication Failed Login in First",
+      field: "Auth Token Missing",
+    });
+  } else {
     if (typeof req?.body?.otp !== "string") {
       next({
         message: "OTP Info Required",
@@ -218,9 +256,10 @@ export const verifyOTP: RequestHandler = catchAsync(async (req, res, next) => {
       });
     } else {
       const result = await USER_SERVICE.verifyOTP(
-        token,
+        otpType,
+        req.token,
         Number(req?.body?.otp)
-      ); 
+      );
       SendResponse(res, result);
     }
   }
@@ -238,7 +277,7 @@ export const login: RequestHandler = catchAsync(async (req, res, next) => {
   const result = await USER_SERVICE.login(email, password);
 
   if (!result) {
-    return SendResponse(res, { msg: "Invalid email or password" });
+    return SendResponse(res, { error: "Invalid email or password" });
   }
 
   const token = JWT.GenToken({
@@ -250,16 +289,33 @@ export const login: RequestHandler = catchAsync(async (req, res, next) => {
   });
 
   return SendResponse(res, {
-    msg: "Successfully Login",
+    message: "Successfully Login",
     token,
     user: result,
   });
 });
+export const newPasswordWithOTP: RequestHandler = catchAsync(
+  async (req, res, next) => {
+    const { otp, newPassword } = req.body;
+    const token = req.cookies.session_token;
+    if (typeof newPassword !== "string")
+      throw new Error("New Password Required");
+    if (typeof otp !== "string") throw new Error("OTP Required");
+    const result = await USER_SERVICE.newPasswordWithOTP(
+      token,
+      otp,
+      newPassword
+    );
+    req.res?.clearCookie("session_token");
+    SendResponse(res, result);
+  }
+);
 const USER_CONTROL = {
   createUserControl,
   getExistUser,
   getUsers,
   getMyProfile,
+  forgetPassword,
   getUser,
   updatePassword,
   updateProfile,
@@ -268,5 +324,6 @@ const USER_CONTROL = {
   sendOTP,
   verifyOTP,
   login,
+  newPasswordWithOTP
 };
 export default USER_CONTROL;

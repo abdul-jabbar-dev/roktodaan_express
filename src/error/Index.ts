@@ -1,43 +1,61 @@
 import { ErrorRequestHandler } from "express";
 import { BaseIssue } from "valibot";
-import { SendFiledError } from "../types/error";
-import SendErrorResponse from "../schema/Response/response";
-import { CUSTOM_VALIBOT, VALIBOT } from "../constant/error_cont";
 import { PrismaClientInitializationError } from "../prisma/app/generated/prisma/client/runtime/library";
 
+export type SendFiledError = {
+  field: string;
+  error: string;
+  path?: string;
+};
+
 const GlobalError: ErrorRequestHandler = (error, req, res, next) => {
-  console.log(error);
-  if (error instanceof PrismaClientInitializationError) {
-    return res.status(500).json({
-      status: "Server Error",
-      message: "Database Connection Error",
-    });
-  }
-  if (error?.from === CUSTOM_VALIBOT) {
-    const errors: SendFiledError[] = [
-      {
-        message: "Phone Number Already Exist!",
-        field: "phoneNumber",
-      },
-    ];
-    return SendErrorResponse(res, { name: "Duplication Error", errors });
-  }
-  if (error?.from === VALIBOT) {
-    const issues = error?.errors?.issues as BaseIssue<any>[];
-
-    const errors: SendFiledError[] = issues.map((issue) => ({
-      field: issue.path?.reverse()[0].key as string,
-      path: issue.path?.map((p) => p.key).join(".") || ("unknown" as string),
-      message: issue.message as string,
-    }));
-
-    return SendErrorResponse(res, { name: "Validation Error", errors });
-  }
-
-  res.status(500).json({
+  console.error("Global Error Handler:", error,"------------------------------------------------------------------------------------------------");
+  // Default response
+  let response = {
     status: "error",
-    message: error.message || "Internal server error",
-  });
+    error:
+      typeof error.message === "string"
+        ? error.message
+        : "Internal server error",
+  } as { status: string; error: string | SendFiledError[] };
+
+  // 🧠 Handle Prisma DB init error
+  if (error instanceof PrismaClientInitializationError) {
+    console.log("Prisma Initialization Error:", error);
+    response.error = "Database connection error";
+    return res.status(500).json(response);
+  }
+
+  // 🧩 Handle Valibot validation errors
+  const issues = error?.errors?.issues as BaseIssue<any>[] | undefined;
+  if (Array.isArray(issues)) {
+    response.error = issues.map(
+      (issue): SendFiledError => ({
+        field: (issue.path?.[issue.path.length - 1]?.key ||
+          "unknown") as string,
+        path: issue.path?.map((p) => p.key).join(".") || "unknown",
+        error: issue.message,
+      })
+    );
+    return res.status(400).json(response);
+  }
+
+  // ⚙️ Custom flagged error (optional, e.g., duplicate phone)
+  if (error?.from === "CUSTOM_VALIBOT") {
+    response.error = [
+      { field: "phoneNumber", error: "Phone number already exists!" },
+    ];
+    return res.status(400).json(response);
+  }
+
+  // 🪶 Simple string or general Error
+  const message =
+    typeof error === "string"
+      ? error
+      : error?.message || "Unknown server error";
+
+  response.error = message;
+  res.status(500).json(response);
 };
 
 export default GlobalError;
