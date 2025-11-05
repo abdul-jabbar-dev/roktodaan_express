@@ -33,6 +33,10 @@ export const createUserControl: RequestHandler = catchAsync(
 );
 
 export const getUsers: RequestHandler = catchAsync(async (req, res) => {
+
+  const authHeader = req.headers.authorization || undefined;
+  const token = authHeader?.split(" ")[1] || undefined;
+
   const query: GetUsersParams = {
     bloodGroup: undefined,
     address: undefined,
@@ -44,16 +48,18 @@ export const getUsers: RequestHandler = catchAsync(async (req, res) => {
       console.warn("Failed to parse req.query.address as JSON:", err);
     }
   }
- 
+
   if (typeof req?.query?.bloodGroup === "string") {
-    const enumMake = mapBloodGroupLabelToEnum(req.query.bloodGroup as string); 
-    query.bloodGroup =  enumMake || (req.query.bloodGroup as string)?.toUpperCase();
+    const enumMake = mapBloodGroupLabelToEnum(req.query.bloodGroup as string);
+    query.bloodGroup =
+      enumMake || (req.query.bloodGroup as string)?.toUpperCase();
   }
-   
+
   const result: GetCreateUserPayload[] = await USER_SERVICE.getUsersService(
-    query
-  );
-  SendResponse(res, result.slice(0,3));
+    query,
+    token
+  ); 
+  SendResponse(res, result );
 });
 
 export const getUser: RequestHandler = catchAsync(async (req, res, next) => {

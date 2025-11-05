@@ -51,17 +51,29 @@ const createUserService = async (
 };
 
 // ---------- Get All Users ----------
-const getUsersService = async (params?: GetUsersParams) => {
-  console.log(params);
 
-  //   {
-  //   bloodGroup: 'A_POS',
-  //   address: { latitude: 23.9174294, longitude: 90.4001587 }
-  // }
+const getUsersService = async (
+  params?: GetUsersParams,
+  token?: string | undefined
+) => {
+  let id: string | undefined;
+
+  if (token) {
+    id = (JWT.DecToken(token) as JwtPayload)?.id || undefined;
+  }
 
   try {
     const where: Prisma.UserWhereInput = {};
-    if (params?.bloodGroup) where.profile = { bloodGroup: params.bloodGroup };
+
+    if (id) {
+      where.NOT = {
+        id: id,
+      };
+    }
+    if (params?.bloodGroup) {
+      where.profile = { bloodGroup: params.bloodGroup };
+    }
+
     if (
       params?.address &&
       typeof params.address === "object" &&
@@ -88,11 +100,18 @@ const getUsersService = async (params?: GetUsersParams) => {
       };
     }
 
-    return await prisma.user.findMany({
+    const users = await prisma.user.findMany({
       where,
-      include: { profile: true, address: true, donationExperience: true },
+      include: {
+        profile: true,
+        address: true,
+        donationExperience: true,
+      },
     });
-  } catch {
+
+    return users;
+  } catch (e) {
+    console.error("Error fetching users:", e);
     throw new Error("Failed to fetch users");
   }
 };
