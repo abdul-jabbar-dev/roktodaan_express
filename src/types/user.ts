@@ -5,10 +5,12 @@ export type UserPayload = Prisma.UserGetPayload<{
     address: true;
     donationExperience: true;
     profile: true;
-    
   };
 }>;
 
 export type GetUsersParams = {
-  bloodGroup: BloodGroup|undefined;
+  bloodGroup: BloodGroup | undefined;
+  address:
+    | { latitude: number; longitude: number }
+    | { division: string; district: string; upazila: string }|undefined;
 };

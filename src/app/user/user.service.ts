@@ -52,9 +52,41 @@ const createUserService = async (
 
 // ---------- Get All Users ----------
 const getUsersService = async (params?: GetUsersParams) => {
+  console.log(params);
+
+  //   {
+  //   bloodGroup: 'A_POS',
+  //   address: { latitude: 23.9174294, longitude: 90.4001587 }
+  // }
+
   try {
     const where: Prisma.UserWhereInput = {};
     if (params?.bloodGroup) where.profile = { bloodGroup: params.bloodGroup };
+    if (
+      params?.address &&
+      typeof params.address === "object" &&
+      (("division" in params.address &&
+        typeof (params.address as any).division === "string") ||
+        ("district" in params.address &&
+          typeof (params.address as any).district === "string") ||
+        ("upazila" in params.address &&
+          typeof (params.address as any).upazila === "string"))
+    ) {
+      where.address = {
+        ...("division" in params.address &&
+        typeof (params.address as any).division === "string"
+          ? { division: (params.address as any).division }
+          : {}),
+        ...("district" in params.address &&
+        typeof (params.address as any).district === "string"
+          ? { district: (params.address as any).district }
+          : {}),
+        ...("upazila" in params.address &&
+        typeof (params.address as any).upazila === "string"
+          ? { upazila: (params.address as any).upazila }
+          : {}),
+      };
+    }
 
     return await prisma.user.findMany({
       where,
@@ -147,7 +179,6 @@ const updateProfile = async (token: string, profileData: any) => {
   }
   return { status: true };
 };
- 
 
 // ---------- Update Address ----------
 const updateAddress = async (
@@ -393,7 +424,7 @@ const USER_SERVICE = {
   login,
   forgetPassword,
   checkBlacklistToken,
-  newPasswordWithOTP
+  newPasswordWithOTP,
 };
 
 export default USER_SERVICE;

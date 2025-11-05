@@ -35,18 +35,25 @@ export const createUserControl: RequestHandler = catchAsync(
 export const getUsers: RequestHandler = catchAsync(async (req, res) => {
   const query: GetUsersParams = {
     bloodGroup: undefined,
+    address: undefined,
   };
-  if (typeof req?.query?.bloodgroup === "string") {
-    const enumMake = mapBloodGroupLabelToEnum(req.query.bloodgroup as string);
-
-    query.bloodGroup =
-      enumMake || (req.query.bloodgroup as string)?.toUpperCase();
+  if (typeof req.query.address === "string") {
+    try {
+      query.address = req.query.address = JSON.parse(req.query.address);
+    } catch (err) {
+      console.warn("Failed to parse req.query.address as JSON:", err);
+    }
   }
-
+ 
+  if (typeof req?.query?.bloodGroup === "string") {
+    const enumMake = mapBloodGroupLabelToEnum(req.query.bloodGroup as string); 
+    query.bloodGroup =  enumMake || (req.query.bloodGroup as string)?.toUpperCase();
+  }
+   
   const result: GetCreateUserPayload[] = await USER_SERVICE.getUsersService(
     query
   );
-  SendResponse(res, result);
+  SendResponse(res, result.slice(0,3));
 });
 
 export const getUser: RequestHandler = catchAsync(async (req, res, next) => {
@@ -96,7 +103,7 @@ export const updatePassword: RequestHandler = catchAsync(
         message: "Authentication Failed Login in First",
         field: "Auth Token Missing",
       });
-    } else { 
+    } else {
       if (typeof req?.body?.password !== "string") {
         next({
           message: "New Password Required",
@@ -132,7 +139,6 @@ export const updateProfile: RequestHandler = catchAsync(
     }
   }
 );
-
 
 export const updateAddress: RequestHandler = catchAsync(
   async (req, res, next) => {
@@ -231,7 +237,7 @@ export const sendOTP: RequestHandler = catchAsync(async (req, res, next) => {
       });
       if (userIDStatus?.credential?.isVerify) {
         new Error("Email Already Verify!");
-      } 
+      }
       const result = await USER_SERVICE.sendOTP(
         "emailVerification",
         info?.id as string,
@@ -242,7 +248,7 @@ export const sendOTP: RequestHandler = catchAsync(async (req, res, next) => {
   }
 });
 export const verifyOTP: RequestHandler = catchAsync(async (req, res, next) => {
-  const otpType = req?.query.otpType as otpType; 
+  const otpType = req?.query.otpType as otpType;
   if (!req.token) {
     next({
       message: "Authentication Failed Login in First",
@@ -324,6 +330,6 @@ const USER_CONTROL = {
   sendOTP,
   verifyOTP,
   login,
-  newPasswordWithOTP
+  newPasswordWithOTP,
 };
 export default USER_CONTROL;

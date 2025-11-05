@@ -2,6 +2,7 @@
 import { BloodGroup } from "../prisma/app/generated/prisma/client";
 
 export const mapBloodGroupLabelToEnum = (label: string): BloodGroup => {
+ 
   const mapping: Record<string, BloodGroup> = {
     "A+": "A_POS",
     "A-": "A_NEG",
