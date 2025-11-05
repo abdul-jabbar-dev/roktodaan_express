@@ -1,7 +1,7 @@
 import { Response } from "express";
-import SendError, { SendErrorPayload } from "../../types/error";
+import SendError from "../../types/error";
 
-const SendErrorResponse = (res: Response, issue: SendErrorPayload) => {
+const SendErrorResponse = (res: Response, issue: any) => {
   const error: SendError = {
     status: false,
     error: issue,

@@ -1,11 +1,4 @@
-// ===========================================================
-// Error Response Types (Updated & Simplified)
-// ===========================================================
-
-/**
- * Individual field-level error item
- * e.g. { field: "email", error: "Invalid email format", path: "user.email" }
- */
+ 
 export type SendFiledError = {
   field: string;
   error: string;
@@ -29,7 +22,7 @@ export type SendFiledError = {
  * }
  */
 export type SendError = {
-  status: string; // usually "error" or "failed"
+  status: boolean; // usually "error" or "failed"
   error: string | SendFiledError[];
 };
 
