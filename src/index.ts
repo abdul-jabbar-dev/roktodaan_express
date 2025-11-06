@@ -8,10 +8,22 @@ import cookieParser from "cookie-parser";
 dotenv.config();
 
 const app = express();
+
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://roktodaan.netlify.app",
+];
+
 app.use(
   cors({
-    origin: "http://localhost:3000", // frontend origin
-    credentials: true, // allow cookies
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true, // যদি cookies বা auth headers ব্যবহার করো
   })
 );
 app.use(cookieParser());
