@@ -1,4 +1,5 @@
 "use strict";
+// import { BloodGroup } from "../prisma/app/generated/prisma/client";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.mapBloodGroupEnumToLabel = exports.mapBloodGroupLabelToEnum = void 0;
 const mapBloodGroupLabelToEnum = (label) => {

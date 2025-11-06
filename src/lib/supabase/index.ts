@@ -1,5 +1,6 @@
+import { otpType } from "@prisma/client";
 import nodemailer from "nodemailer";
-import { otpType } from "../../prisma/app/generated/prisma/client";
+// import { otpType } from "../../prisma/app/generated/prisma/client";
 
 const transporter = nodemailer.createTransport({
   service: "gmail",

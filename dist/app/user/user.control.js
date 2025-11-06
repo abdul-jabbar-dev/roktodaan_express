@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.newPasswordWithOTP = exports.login = exports.verifyOTP = exports.sendOTP = exports.forgetPassword = exports.updateExperiance = exports.updateAddress = exports.updateProfile = exports.updatePassword = exports.getExistUser = exports.getMyProfile = exports.getUser = exports.getUsers = exports.createUserControl = void 0;
 const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
 const user_service_1 = __importDefault(require("./user.service"));
+// import { otpType, Prisma } from "../../prisma/app/generated/prisma/client";
 const response_1 = require("../../schema/Response/response");
 const bloodGroup_1 = require("../../mapping/bloodGroup");
 const jwt_1 = __importDefault(require("../../lib/jwt"));

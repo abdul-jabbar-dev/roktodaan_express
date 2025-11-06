@@ -1,5 +1,6 @@
+import { GENDER } from "@prisma/client";
 import * as v from "valibot";
-import { GENDER } from "../prisma/app/generated/prisma/client";
+// import { GENDER } from "../prisma/app/generated/prisma/client";
 
 const BloodGroupLabel = {
   A_POS: "A+",

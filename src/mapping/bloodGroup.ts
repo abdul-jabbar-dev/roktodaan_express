@@ -1,5 +1,7 @@
  
-import { BloodGroup } from "../prisma/app/generated/prisma/client";
+// import { BloodGroup } from "../prisma/app/generated/prisma/client";
+
+import { BloodGroup } from "@prisma/client";
 
 export const mapBloodGroupLabelToEnum = (label: string): BloodGroup => {
  

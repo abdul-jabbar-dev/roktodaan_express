@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 import catchAsync from "../../utils/catchAsync";
 import USER_SERVICE from "./user.service";
-import { otpType, Prisma } from "../../prisma/app/generated/prisma/client";
+// import { otpType, Prisma } from "../../prisma/app/generated/prisma/client";
 import { SendResponse } from "../../schema/Response/response";
 import { mapBloodGroupLabelToEnum } from "../../mapping/bloodGroup";
 import { GetUsersParams } from "../../types/user";
@@ -9,6 +9,7 @@ import JWT from "../../lib/jwt";
 import { JwtPayload } from "jsonwebtoken";
 import prisma from "../../connection/db";
 import { forgetPasswordJWT_session } from "../../constant/jwt_payload_const";
+import { otpType, Prisma } from "@prisma/client";
 
 type GetCreateUserPayload = Prisma.UserGetPayload<{
   include: { profile: true; address: true; donationExperience: true };

@@ -1,6 +1,7 @@
+import { PrismaClientInitializationError } from "@prisma/client/runtime/library";
 import { ErrorRequestHandler } from "express";
 import { BaseIssue } from "valibot";
-import { PrismaClientInitializationError } from "../prisma/app/generated/prisma/client/runtime/library";
+// import { PrismaClientInitializationError } from "../prisma/app/generated/prisma/client/runtime/library";
 
 export type SendFiledError = {
   field: string;

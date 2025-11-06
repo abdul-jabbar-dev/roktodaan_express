@@ -33,8 +33,9 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
+const client_1 = require("@prisma/client");
 const v = __importStar(require("valibot"));
-const client_1 = require("../prisma/app/generated/prisma/client");
+// import { GENDER } from "../prisma/app/generated/prisma/client";
 const BloodGroupLabel = {
     A_POS: "A+",
     A_NEG: "A-",

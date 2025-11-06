@@ -1,4 +1,6 @@
-import { BloodGroup, Prisma } from "../prisma/app/generated/prisma/client";
+// import { BloodGroup, Prisma } from "../prisma/app/generated/prisma/client";
+
+import { BloodGroup, Prisma } from "@prisma/client";
 
 export type UserPayload = Prisma.UserGetPayload<{
   include: {

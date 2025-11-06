@@ -4,7 +4,7 @@ import * as v from "valibot";
 import createUserSchema from "../../validators/createUser";
 import { mapBloodGroupLabelToEnum } from "../../mapping/bloodGroup";
 import { CUSTOM_VALIBOT } from "../../constant/error_cont";
-import { otpType, Prisma } from "../../prisma/app/generated/prisma/client";
+// import { otpType, Prisma } from "../../prisma/app/generated/prisma/client";
 import { JwtPayload } from "jsonwebtoken";
 
 import sendOtpByEmail from "../../lib/supabase";
@@ -12,6 +12,7 @@ import genOTP from "../../utils/genOTP";
 import { comparePassword, hashedPassword } from "../../lib/bycrypt";
 import { normalizeEmail } from "../../utils/normalizedEmail";
 import JWT from "../../lib/jwt";
+import { otpType, Prisma } from "@prisma/client";
 
 // ---------- Create User ----------
 const createUserService = async (

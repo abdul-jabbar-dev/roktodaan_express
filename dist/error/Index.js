@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const library_1 = require("../prisma/app/generated/prisma/client/runtime/library");
+const library_1 = require("@prisma/client/runtime/library");
 const GlobalError = (error, req, res, next) => {
     console.error("Global Error Handler:", error, "------------------------------------------------------------------------------------------------");
     // Default response
