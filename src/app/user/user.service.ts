@@ -186,7 +186,7 @@ const getPopularUsersService = async (
 
     // only keep users with > 1 donation
     const filtered = users.filter((u) => u._count.donationExperience > 1);
-    console.log(filtered);
+  
 
     return filtered;
   } catch (e) {
@@ -227,13 +227,26 @@ const getMyProfile = async (token: string) => {
   const user = await prisma.user.findUnique({
     where: { id: info?.id },
     include: {
+      reservations: { include: { donation: true } },
       profile: true,
       address: true,
-      bloodRequest:{include:{donations:{include:{reserved:{include:{donor:{include:{profile:true,address:true}}}}}}}},
+      bloodRequest: {
+        include: {
+          donations: {
+            include: {
+               reserved: {
+                include: { 
+                  donor: { include: { profile: true, address: true } },
+                },
+              },
+            },
+          },
+        },
+      },
       donationExperience: true,
       credential: { select: { randomPasswod: true, isVerify: true } },
     },
-  });
+  }); 
   if (!user) throw new Error("No User Found!");
   return user;
 };

@@ -22,4 +22,8 @@ requestRoute.get(
   "/get_requests", 
    REQUEST_CONTROL.getAllRequests
 ); 
+requestRoute.get(
+  "/request/:user_id", 
+   REQUEST_CONTROL.getUpcommingRequest
+); 
 export default requestRoute;

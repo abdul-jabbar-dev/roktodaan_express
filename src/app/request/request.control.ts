@@ -25,5 +25,13 @@ const appointmentRequest: RequestHandler = catchAsync(async (req, res, next) => 
   SendResponse(res, result);
 });
 
-const REQUEST_CONTROL = { publishRequest, getAllRequests,appointmentRequest };
+const getUpcommingRequest: RequestHandler = catchAsync(async (req, res, next) => {
+  
+  const user_id = req.params.user_id 
+ 
+  const result = await REQUEST_SERVICE.getUpcommingRequest(user_id);
+  SendResponse(res, result);
+});
+
+const REQUEST_CONTROL = { publishRequest, getAllRequests,appointmentRequest ,getUpcommingRequest};
 export default REQUEST_CONTROL;

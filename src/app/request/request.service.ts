@@ -29,7 +29,7 @@ const publishRequest = async (
         userId,
         donations: donationsData,
       },
-      include: { donations: true }, 
+      include: { donations: true },
     });
 
     return newRequest;
@@ -54,6 +54,21 @@ const getAllRequests = async (): Promise<BloodRequest[]> => {
       },
     });
 
+    return requests;
+  } catch (error) {
+    console.error("Error fetching blood requests:", error);
+    return [];
+  }
+};
+const getUpcommingRequest = async (userid: string) => {
+  try {
+    const requests = await prisma.bloodRequestReservation.findMany({
+      where: { donorId: userid },
+      include: {
+        donation: { include: { bloodRequest: true } },
+      },
+      orderBy: { donation: { date: "desc" } },
+    }); 
     return requests;
   } catch (error) {
     console.error("Error fetching blood requests:", error);
@@ -118,4 +133,5 @@ export const REQUEST_SERVICE = {
   publishRequest,
   getAllRequests,
   appointmentRequest,
+  getUpcommingRequest,
 };
