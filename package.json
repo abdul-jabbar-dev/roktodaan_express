@@ -6,10 +6,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node dist/index.js",
-    "build":"tsc",
+    "build": "tsc",
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "prisma_generate": "npx prisma generate --schema=./src/prisma/schema.prisma",
-     "postinstall": "prisma generate --schema=./src/prisma/schema.prisma",
+    "postinstall": "prisma generate --schema=./src/prisma/schema.prisma",
     "prisma_push": "npx prisma push --schema=./src/prisma/schema.prisma",
     "prisma_migrate": "npx prisma migrate dev --schema=./src/prisma/schema.prisma"
   },

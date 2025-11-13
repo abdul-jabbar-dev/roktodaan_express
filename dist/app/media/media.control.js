@@ -16,7 +16,11 @@ const deleteMedia = (0, catchAsync_1.default)(async (req, res) => {
     const id = String(req.query?.public_id);
     if (id) {
         const res = await cludinary_1.default.uploader.destroy(id);
-        console.log(res);
+        (0, response_1.SendResponse)(res, {
+            status: true,
+            message: "Image delete successfully",
+            img: res,
+        });
     }
 });
 exports.uploadImg = (0, catchAsync_1.default)(async (req, res) => {
@@ -78,7 +82,6 @@ exports.uploadImg = (0, catchAsync_1.default)(async (req, res) => {
     return res.status(500).json({ error: "Failed to upload or update image" });
 });
 exports.updateProfileIMG = (0, catchAsync_1.default)(async (req, res, next) => {
-    console.log("🧩 Update Profile IMG called with link:", req.query.link);
     // ✅ Step 1: Auth check
     if (!req.token) {
         return next({

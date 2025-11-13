@@ -63,6 +63,24 @@ export const getUsers: RequestHandler = catchAsync(async (req, res) => {
   SendResponse(res, result );
 });
 
+
+export const getPopularUsers: RequestHandler = catchAsync(async (req, res) => {
+
+  const authHeader = req.headers.authorization || undefined;
+  const token = authHeader?.split(" ")[1] || undefined;
+
+  const query: GetUsersParams = {
+    bloodGroup: undefined,
+    address: undefined,
+  };
+
+  const result: GetCreateUserPayload[] = await USER_SERVICE.getPopularUsersService(
+    query,
+    token
+  ); 
+  SendResponse(res, result );
+});
+
 export const getUser: RequestHandler = catchAsync(async (req, res, next) => {
   const userId = req?.params?.id;
   if (userId) {
@@ -83,7 +101,7 @@ export const getMyProfile: RequestHandler = catchAsync(
         field: "Auth Token Missing",
       });
     } else {
-      const result: GetCreateUserPayload | {} = await USER_SERVICE.getMyProfile(
+      const result = await USER_SERVICE.getMyProfile(
         req.token
       );
       SendResponse(res, result);
@@ -338,5 +356,6 @@ const USER_CONTROL = {
   verifyOTP,
   login,
   newPasswordWithOTP,
+  getPopularUsers
 };
 export default USER_CONTROL;

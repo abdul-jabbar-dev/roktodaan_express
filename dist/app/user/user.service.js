@@ -98,6 +98,72 @@ const getUsersService = async (params, token) => {
         throw new Error("Failed to fetch users");
     }
 };
+// ---------- Get All popular Users ----------
+const getPopularUsersService = async (params, token) => {
+    let id;
+    if (token) {
+        id = jwt_1.default.DecToken(token)?.id || undefined;
+    }
+    try {
+        const where = {};
+        if (id) {
+            where.NOT = {
+                id: id,
+            };
+        }
+        if (params?.bloodGroup) {
+            where.profile = { bloodGroup: params.bloodGroup };
+        }
+        if (params?.address &&
+            typeof params.address === "object" &&
+            (("division" in params.address &&
+                typeof params.address.division === "string") ||
+                ("district" in params.address &&
+                    typeof params.address.district === "string") ||
+                ("upazila" in params.address &&
+                    typeof params.address.upazila === "string"))) {
+            where.address = {
+                ...("division" in params.address &&
+                    typeof params.address.division === "string"
+                    ? { division: params.address.division }
+                    : {}),
+                ...("district" in params.address &&
+                    typeof params.address.district === "string"
+                    ? { district: params.address.district }
+                    : {}),
+                ...("upazila" in params.address &&
+                    typeof params.address.upazila === "string"
+                    ? { upazila: params.address.upazila }
+                    : {}),
+            };
+        }
+        const users = await db_1.default.user.findMany({
+            where: {
+                ...(where && where),
+                donationExperience: {
+                    some: {}, // at least one donation
+                },
+            },
+            include: {
+                profile: true,
+                address: true,
+                donationExperience: true,
+                _count: { select: { donationExperience: true } },
+            },
+            orderBy: {
+                donationExperience: { _count: "desc" },
+            },
+        });
+        // only keep users with > 1 donation
+        const filtered = users.filter((u) => u._count.donationExperience > 1);
+        console.log(filtered);
+        return filtered;
+    }
+    catch (e) {
+        console.error("Error fetching users:", e);
+        throw new Error("Failed to fetch users");
+    }
+};
 // ---------- Get Single User ----------
 const getUserService = async (userId) => {
     const user = await db_1.default.user.findUnique({
@@ -132,6 +198,7 @@ const getMyProfile = async (token) => {
         include: {
             profile: true,
             address: true,
+            bloodRequest: { include: { donations: { include: { reserved: { include: { donor: { include: { profile: true, address: true } } } } } } } },
             donationExperience: true,
             credential: { select: { randomPasswod: true, isVerify: true } },
         },
@@ -396,5 +463,6 @@ const USER_SERVICE = {
     forgetPassword,
     checkBlacklistToken,
     newPasswordWithOTP,
+    getPopularUsersService,
 };
 exports.default = USER_SERVICE;

@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.newPasswordWithOTP = exports.login = exports.verifyOTP = exports.sendOTP = exports.forgetPassword = exports.updateExperiance = exports.updateAddress = exports.updateProfile = exports.updatePassword = exports.getExistUser = exports.getMyProfile = exports.getUser = exports.getUsers = exports.createUserControl = void 0;
+exports.newPasswordWithOTP = exports.login = exports.verifyOTP = exports.sendOTP = exports.forgetPassword = exports.updateExperiance = exports.updateAddress = exports.updateProfile = exports.updatePassword = exports.getExistUser = exports.getMyProfile = exports.getUser = exports.getPopularUsers = exports.getUsers = exports.createUserControl = void 0;
 const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
 const user_service_1 = __importDefault(require("./user.service"));
 // import { otpType, Prisma } from "../../prisma/app/generated/prisma/client";
@@ -46,6 +46,16 @@ exports.getUsers = (0, catchAsync_1.default)(async (req, res) => {
             enumMake || req.query.bloodGroup?.toUpperCase();
     }
     const result = await user_service_1.default.getUsersService(query, token);
+    (0, response_1.SendResponse)(res, result);
+});
+exports.getPopularUsers = (0, catchAsync_1.default)(async (req, res) => {
+    const authHeader = req.headers.authorization || undefined;
+    const token = authHeader?.split(" ")[1] || undefined;
+    const query = {
+        bloodGroup: undefined,
+        address: undefined,
+    };
+    const result = await user_service_1.default.getPopularUsersService(query, token);
     (0, response_1.SendResponse)(res, result);
 });
 exports.getUser = (0, catchAsync_1.default)(async (req, res, next) => {
@@ -285,5 +295,6 @@ const USER_CONTROL = {
     verifyOTP: exports.verifyOTP,
     login: exports.login,
     newPasswordWithOTP: exports.newPasswordWithOTP,
+    getPopularUsers: exports.getPopularUsers
 };
 exports.default = USER_CONTROL;

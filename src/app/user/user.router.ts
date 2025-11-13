@@ -14,6 +14,7 @@ userRouter.post(
   USER_CONTROL.createUserControl
 );
 userRouter.get("/get_users", USER_CONTROL.getUsers);
+userRouter.get("/get_popular_users", USER_CONTROL.getPopularUsers);
 userRouter.get("/session-status", getSessionStatus);
 
 userRouter.get("/get_user/:id", USER_CONTROL.getUser);

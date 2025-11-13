@@ -1,9 +1,9 @@
 generator client {
-  provider = "prisma-client-js" 
+  provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider  = "postgresql"
   url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
@@ -25,24 +25,28 @@ enum BloodGroup {
 }
 
 model User {
- id       String     @id @default(uuid())
+  id                 String                    @id @default(uuid())
   profile            Profile?
   credential         Credential?
   address            Address?
   donationExperience DonationExperience[]
-  createdAt          DateTime             @default(now())
-  updatedAt          DateTime             @updatedAt
+  bloodRequest       BloodRequest[]
+  reservations       BloodRequestReservation[]
+  createdAt          DateTime                  @default(now())
+  updatedAt          DateTime                  @updatedAt
 }
+
 enum otpType {
   emailVerification
   passwordReset
 }
+
 model Profile {
-   id       String     @id @default(uuid())
+  id          String     @id @default(uuid())
   fullName    String
   age         Int
-  email       String    @unique
-  phoneNumber String    
+  email       String     @unique
+  phoneNumber String
   weight      Int
   img         String?
   bod         String?
@@ -51,12 +55,13 @@ model Profile {
   bloodGroup  BloodGroup
   activeDoner Boolean    @default(true)
 
-  user   User @relation(fields: [userId], references: [id])
-  userId String  @unique
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  userId String @unique
 }
 
 model Credential {
- id       String     @id @default(uuid())
+  id            String    @id @default(uuid())
   password      String    @default(uuid())
   randomPasswod Boolean?
   isVerify      Boolean   @default(false)
@@ -65,37 +70,106 @@ model Credential {
   otpType       otpType?
   otpExp        DateTime?
 
-  user   User @relation(fields: [userId], references: [id])
-  userId String  @unique
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique
 }
 
 model Address {
-  id       String     @id @default(uuid())
+  id       String  @id @default(uuid())
   area     String?
   division String
   district String
   upazila  String
   user     User    @relation(fields: [userId], references: [id])
-  userId   String     @unique
+  userId   String  @unique
 }
 
 model DonationExperience {
-  id                   String    @id @default(uuid())
+  id                   String @id @default(uuid())
   lastDonationDate     String
   lastDonationLocation String
 
-  user   User @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
   userId String
 }
 
-
 model BlacklistToken {
-  id        Int      @id @default(autoincrement())
-  token     String   @unique       // JWT string
-  reason    String?                // optional: logout, password_reset, otp
-  userEmail String?                // optional: related user
+  id        String   @id @default(uuid())
+  token     String   @unique // JWT string
+  reason    String? // optional: logout, password_reset, otp
+  userEmail String? // optional: related user
   createdAt DateTime @default(now())
-  expiresAt DateTime                // token expiry timestamp
+  expiresAt DateTime // token expiry timestamp
 
-  @@index([expiresAt])              // cleanup queries fast
+  @@index([expiresAt]) // cleanup queries fast
+}
+
+model BloodRequestReservation {
+  id      String  @id @default(uuid())
+  donor   User?   @relation(fields: [donorId], references: [id])
+  donorId String?
+
+  otherName        String?
+  otherPhoneNumber String?
+  otherAddress     String?
+
+  donation   Donation @relation(fields: [donationId], references: [id])
+  donationId String   @unique // <-- must be unique for 1:1
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Donation {
+  id             String         @id @default(uuid())
+  bloodRequest   BloodRequest   @relation(fields: [bloodRequestId], references: [id])
+  bloodRequestId String
+  bloodType      DonationType
+  date           DateTime
+  place          String
+  status         DonationStatus
+
+  reserved BloodRequestReservation?
+}
+
+model BloodRequest {
+  id            String        @id @default(uuid())
+  patientName   String
+  bloodGroup    BloodGroup
+  hospital      String?
+  urgency       RequestStatus
+  postedAt      DateTime      @default(now())
+  contact       String
+  reason        String
+  attendantName String
+  donorMessage  String?
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  division String
+  district String
+  upazila  String
+
+  donations Donation[]
+}
+
+enum RequestStatus {
+  VeryUrgent
+  Urgent
+  Needed
+}
+
+enum DonationStatus {
+  Done
+  NoNeed
+  Reserved
+  Upcomming
+}
+
+enum DonationType {
+  WholeBlood
+  Plasma
+  Platelets
+  RedBloodCells
 }

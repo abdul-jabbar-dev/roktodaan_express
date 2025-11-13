@@ -116,6 +116,84 @@ const getUsersService = async (
     throw new Error("Failed to fetch users");
   }
 };
+// ---------- Get All popular Users ----------
+
+const getPopularUsersService = async (
+  params?: GetUsersParams,
+  token?: string | undefined
+) => {
+  let id: string | undefined;
+
+  if (token) {
+    id = (JWT.DecToken(token) as JwtPayload)?.id || undefined;
+  }
+
+  try {
+    const where: Prisma.UserWhereInput = {};
+
+    if (id) {
+      where.NOT = {
+        id: id,
+      };
+    }
+    if (params?.bloodGroup) {
+      where.profile = { bloodGroup: params.bloodGroup };
+    }
+
+    if (
+      params?.address &&
+      typeof params.address === "object" &&
+      (("division" in params.address &&
+        typeof (params.address as any).division === "string") ||
+        ("district" in params.address &&
+          typeof (params.address as any).district === "string") ||
+        ("upazila" in params.address &&
+          typeof (params.address as any).upazila === "string"))
+    ) {
+      where.address = {
+        ...("division" in params.address &&
+        typeof (params.address as any).division === "string"
+          ? { division: (params.address as any).division }
+          : {}),
+        ...("district" in params.address &&
+        typeof (params.address as any).district === "string"
+          ? { district: (params.address as any).district }
+          : {}),
+        ...("upazila" in params.address &&
+        typeof (params.address as any).upazila === "string"
+          ? { upazila: (params.address as any).upazila }
+          : {}),
+      };
+    }
+
+    const users = await prisma.user.findMany({
+      where: {
+        ...(where && where),
+        donationExperience: {
+          some: {}, // at least one donation
+        },
+      },
+      include: {
+        profile: true,
+        address: true,
+        donationExperience: true,
+        _count: { select: { donationExperience: true } },
+      },
+      orderBy: {
+        donationExperience: { _count: "desc" },
+      },
+    });
+
+    // only keep users with > 1 donation
+    const filtered = users.filter((u) => u._count.donationExperience > 1);
+    console.log(filtered);
+
+    return filtered;
+  } catch (e) {
+    console.error("Error fetching users:", e);
+    throw new Error("Failed to fetch users");
+  }
+};
 
 // ---------- Get Single User ----------
 const getUserService = async (userId: string) => {
@@ -151,6 +229,7 @@ const getMyProfile = async (token: string) => {
     include: {
       profile: true,
       address: true,
+      bloodRequest:{include:{donations:{include:{reserved:{include:{donor:{include:{profile:true,address:true}}}}}}}},
       donationExperience: true,
       credential: { select: { randomPasswod: true, isVerify: true } },
     },
@@ -445,6 +524,7 @@ const USER_SERVICE = {
   forgetPassword,
   checkBlacklistToken,
   newPasswordWithOTP,
+  getPopularUsersService,
 };
 
 export default USER_SERVICE;

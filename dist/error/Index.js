@@ -12,7 +12,6 @@ const GlobalError = (error, req, res, next) => {
     };
     // 🧠 Handle Prisma DB init error
     if (error instanceof library_1.PrismaClientInitializationError) {
-        console.log("Prisma Initialization Error:", error);
         response.error = "Database connection error";
         return res.status(500).json(response);
     }

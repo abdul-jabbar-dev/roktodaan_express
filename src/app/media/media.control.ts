@@ -14,7 +14,12 @@ const deleteMedia: RequestHandler = catchAsync(async (req, res) => {
   const id: string = String(req.query?.public_id);
   if (id) {
     const res = await cloudinary.uploader.destroy(id as string);
-    console.log(res);
+
+   SendResponse(res, {
+        status: true,
+        message: "Image delete successfully",
+        img:res,
+      });
   }
 });
  
@@ -90,8 +95,6 @@ export const uploadImg: RequestHandler = catchAsync(async (req, res) => {
 
 export const updateProfileIMG: RequestHandler = catchAsync(
   async (req, res, next) => {
-    console.log("🧩 Update Profile IMG called with link:", req.query.link);
-
     // ✅ Step 1: Auth check
     if (!req.token) {
       return next({

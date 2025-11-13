@@ -13,6 +13,7 @@ const session_control_1 = require("../session/session.control");
 const userRouter = express_1.default.Router();
 userRouter.post("/create_user", (0, valibot_1.default)(createUser_1.default), (0, password_encrypted_1.default)(), user_control_1.default.createUserControl);
 userRouter.get("/get_users", user_control_1.default.getUsers);
+userRouter.get("/get_popular_users", user_control_1.default.getPopularUsers);
 userRouter.get("/session-status", session_control_1.getSessionStatus);
 userRouter.get("/get_user/:id", user_control_1.default.getUser);
 userRouter.get("/me", verify_token_1.verifyToken, user_control_1.default.getMyProfile);

@@ -11,9 +11,20 @@ const Index_1 = __importDefault(require("./error/Index"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
+const allowedOrigins = [
+    "http://localhost:3000",
+    "https://roktodaan.netlify.app",
+];
 app.use((0, cors_1.default)({
-    origin: "http://localhost:3000", // frontend origin
-    credentials: true, // allow cookies
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        }
+        else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
+    credentials: true, // যদি cookies বা auth headers ব্যবহার করো
 }));
 app.use((0, cookie_parser_1.default)());
 app.use(express_1.default.json());
